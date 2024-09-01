@@ -9,7 +9,7 @@ const MenuContainer = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        navigate(`/pages/search?query=${encodeURIComponent(searchQuery)}`);
+        navigate(`/books/search?title=${encodeURIComponent(searchQuery)}`);
     };
 
     return (
