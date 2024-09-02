@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-
-const NewQuestion = () => {
+const NewQuestion = ({ onSubmit }) => {
     const [questionTitle, setQuestionTitle] = useState('');
     const [questionContent, setQuestionContent] = useState('');
     const [writer, setWriter] = useState('');
@@ -11,11 +9,25 @@ const NewQuestion = () => {
     const [file, setFile] = useState(null);
     const [text, setText] = useState(null);
     const [bookSuggestions, setBookSuggestions] = useState([]);
-    const [isExpanded, setIsExpanded] = useState(false); // For collapsing/expanding
+    const [isExpanded, setIsExpanded] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('질문 생성:', { questionTitle, questionContent, writer, book, file });
+
+        const formData = new FormData();
+        formData.append('title', questionTitle);
+        formData.append('content', questionContent);
+        formData.append('writer', writer);
+        formData.append('book', book);
+        if (file) {
+            formData.append('file', file);
+        }
+
+        onSubmit(formData);
+        resetForm();
+    };
+
+    const resetForm = () => {
         setQuestionTitle('');
         setQuestionContent('');
         setWriter('');
@@ -23,13 +35,13 @@ const NewQuestion = () => {
         setFile(null);
         setText(null);
         setBookSuggestions([]);
+        setIsExpanded(false);
     };
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
 
-        // Create a text of the selected file (if it's an image)
         if (selectedFile && selectedFile.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -45,7 +57,6 @@ const NewQuestion = () => {
         const query = e.target.value;
         setBook(query);
 
-        // Simulate async search operation (replace with actual API call)
         if (query) {
             fetchBookSuggestions(query);
         } else {
@@ -53,8 +64,12 @@ const NewQuestion = () => {
         }
     };
 
+    const handleBookSelect = (bookTitle) => {
+        setBook(bookTitle);          // 선택한 책 제목으로 설정
+        setBookSuggestions([]);      // 드롭다운을 숨기기 위해 빈 배열로 설정
+    };
+
     const fetchBookSuggestions = async (query) => {
-        // Replace with your actual API call logic
         const mockBooks = [
             { id: 1, title: 'JavaScript: The Good Parts', image: 'https://via.placeholder.com/50' },
             { id: 2, title: 'You Don’t Know JS', image: 'https://via.placeholder.com/50' },
@@ -70,7 +85,6 @@ const NewQuestion = () => {
 
     return (
         <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            {/* Title and Collapse/Expand Button */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold text-white">Post a Question</h2>
                 <button onClick={() => setIsExpanded(!isExpanded)} className="text-white">
@@ -80,20 +94,17 @@ const NewQuestion = () => {
 
             {isExpanded && (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* writer and Book Row */}
                     <div className="flex space-x-4">
-                        {/* writer Input */}
                         <div className="flex flex-col w-2/5 space-y-2">
                             <input
                                 type="text"
                                 value={writer}
                                 onChange={(e) => setWriter(e.target.value)}
-                                placeholder="writer (Enter your name)"
+                                placeholder="Writer (Enter your name)"
                                 className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
 
-                        {/* Book Search */}
                         <div className="flex flex-col w-3/5 space-y-2 relative">
                             <input
                                 type="text"
@@ -102,14 +113,13 @@ const NewQuestion = () => {
                                 placeholder="Related Book (Search for a book...)"
                                 className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
-                            {/* Book Suggestions Dropdown */}
                             {bookSuggestions.length > 0 && (
                                 <div className="absolute top-full mt-1 w-full bg-gray-700 rounded-lg shadow-lg z-10">
                                     {bookSuggestions.map((book) => (
                                         <div
                                             key={book.id}
                                             className="flex items-center p-2 hover:bg-gray-600 cursor-pointer"
-                                            onClick={() => setBook(book.title)}
+                                            onClick={() => handleBookSelect(book.title)}
                                         >
                                             <img src={book.image} alt={book.title} className="w-10 h-10 mr-2" />
                                             <span>{book.title}</span>
@@ -120,7 +130,6 @@ const NewQuestion = () => {
                         </div>
                     </div>
 
-                    {/* Question Title */}
                     <div className="flex flex-col space-y-2">
                         <input
                             type="text"
@@ -131,7 +140,6 @@ const NewQuestion = () => {
                         />
                     </div>
 
-                    {/* Question Content */}
                     <div className="flex flex-col space-y-2">
                         <textarea
                             value={questionContent}
@@ -142,7 +150,6 @@ const NewQuestion = () => {
                         />
                     </div>
 
-                    {/* File Upload */}
                     <div className="flex flex-col space-y-2">
                         <input
                             type="file"
@@ -152,7 +159,7 @@ const NewQuestion = () => {
                         {file && (
                             <div className="mt-2">
                                 {text ? (
-                                    <img src={text} alt="text" className="max-w-xs rounded-lg" />
+                                    <img src={text} alt="Preview" className="max-w-xs rounded-lg" />
                                 ) : (
                                     <p className="text-gray-400">Selected file: {file.name}</p>
                                 )}
@@ -160,7 +167,6 @@ const NewQuestion = () => {
                         )}
                     </div>
 
-                    {/* Submit Button */}
                     <div className="flex justify-center">
                         <button
                             type="submit"
