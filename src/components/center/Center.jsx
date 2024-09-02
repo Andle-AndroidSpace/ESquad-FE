@@ -11,7 +11,7 @@ const Center = () => {
          {/* <Route path="/user/profie" element={} /> */}
          <Route path="/pages/memo" element={<Note />} />
          <Route path="/pages/question" element={<Qboard />} />
-         <Route path="/books/search" element={<Search />} />
+         <Route path="/pages/search" element={<Search />} />
          <Route path="/pages/studypages" element={<Study />} />
          <Route path='/pages/studypages/:no' element={<StudyPage />} />
       </Routes>
