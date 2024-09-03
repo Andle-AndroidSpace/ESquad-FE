@@ -2,54 +2,34 @@
 import React, { useState } from 'react';
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import {useAuth} from "../../AuthContext.jsx";
 
 // eslint-disable-next-line react/prop-types
-const LoginForm = ({ setIsLoggedIn }) => {
-   const [user, setUser] = useState({
-      username: '',
-      password: '',
-   });
+const LoginForm = () => {
+   const { login } = useAuth();
    const navigate = useNavigate();
+   const [user, setUser] = useState({ username: '', password: '' });
 
-   const handleChange =  (e) => {
+   const handleChange = (e) => {
       const { name, value } = e.target;
       setUser({ ...user, [name]: value });
    };
 
-   const handleLogin = async (e) => {
+   const handleSubmit = async (e) => {
       e.preventDefault();
-
-      if (!user.username.trim() || !user.password.trim()) {
-         alert('아이디와 비밀번호를 모두 입력해 주세요.');
-         return;
+      const success = await login(user.username, user.password);
+      if (success) {
+         navigate('/');
+      } else {
+         alert('로그인에 실패했습니다. 다시 시도하세요.');
       }
-
-         const formData = new FormData();
-         formData.append('username', user.username);
-         formData.append('password', user.password);
-
-         const response =  await axios ({
-            url: '/loginProc',
-            method: 'POST',
-            data: formData,
-            withCredentials: true
-         });
-
-         if (response.status === 200) {
-            alert('로그인 성공!')
-            setIsLoggedIn(true);
-            navigate('/');
-         } else {
-            alert('로그인 실패')
-         }
    };
 
 
    return (
        <div className='bg-white px-10 py-20 rounded-3xl border-2 border-gray-200'>
           <h2 className='text-5xl font-semibold'>다시 만나서 반가워요</h2>
-          <form onSubmit={handleLogin} className='mt-8'>
+          <form onSubmit={handleSubmit} className='mt-8'>
              <div className='text-left mt-4'>
                 <label
                     htmlFor="username"
