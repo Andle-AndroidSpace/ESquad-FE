@@ -6,37 +6,45 @@ import axios from 'axios';
 
 // eslint-disable-next-line react/prop-types
 const LoginForm = ({ setIsLoggedIn }) => {
-   const [username, setUsername] = useState('');
-   const [password, setPassword] = useState('');
+   const [user, setUser] = useState({
+      username: '',
+      password: '',
+   });
    const navigate = useNavigate();
+
+   const handleChange =  (e) => {
+      const { name, value } = e.target;
+      setUser({ ...user, [name]: value });
+   };
 
    const handleLogin = async (e) => {
       e.preventDefault();
 
-      console.log({ username, password });
+      if (!user.username.trim() || !user.password.trim()) {
+         alert('아이디와 비밀번호를 모두 입력해 주세요.');
+         return;
+      }
 
-      try {
-         const response = await axios.post('/loginProc', {
-            username,
-            password
-         }, {
+         const formData = new FormData();
+         formData.append('username', user.username);
+         formData.append('password', user.password);
+
+         const response =  await axios ({
+            url: '/loginProc',
+            method: 'POST',
+            data: formData,
             withCredentials: true
          });
-         console.log("서버 응답:", response.data);
 
-         if (response.data.success) {
-            localStorage.setItem('isLoggedIn', 'true');
+         if (response.status === 200) {
+            alert('로그인 성공!')
             setIsLoggedIn(true);
             navigate('/');
-            alert("로그인 성공")
          } else {
-            alert(response.data.message || '로그인에 실패했습니다.');
+            alert('로그인 실패')
          }
-      } catch (error) {
-         console.error("로그인 실패", error);
-         alert('로그인에 실패했습니다. 다시 시도해 주세요.');
-      }
    };
+
 
    return (
        <div className='bg-white px-10 py-20 rounded-3xl border-2 border-gray-200'>
@@ -49,10 +57,11 @@ const LoginForm = ({ setIsLoggedIn }) => {
                 <input
                     type="text"
                     id="username"
+                    name="username"
                     className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
                     placeholder='아이디를 입력하세요'
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={user.username}
+                    onChange={handleChange}
                     required
                 />
              </div>
@@ -63,12 +72,12 @@ const LoginForm = ({ setIsLoggedIn }) => {
                 <input
                     type="password"
                     id="password"
+                    name="password"
                     className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
                     placeholder='비밀번호를 입력하세요'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={user.password}
+                    onChange={handleChange}
                     required
-                    autoComplete="off"
                 />
              </div>
              <div className='mt-8 flex justify-between items-center'>
