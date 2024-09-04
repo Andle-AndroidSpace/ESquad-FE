@@ -1,15 +1,30 @@
-import { useState, useEffect } from 'react';import { Link, useLocation } from 'react-router-dom';
+// BookSearch.jsx
+import { useState, useEffect } from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import { useBook } from './BookProvider.jsx';
 
-const Search = () => {
-   const location = useLocation();
-   const query = new URLSearchParams(location.search).get('query') || '';
+const BookSearch = () => {
 
-    // State for books and loading status
-    const [books, setBooks] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const location = useLocation();
+    const query = new URLSearchParams(location.search).get('query') || '';
 
-    // 백엔드에서 데이터 가져오기
+    const { books, setBooks, setSelectedBook } = useBook(); // Context에서 상태 관리
+    const navigate = useNavigate();
+
+
+    // 로딩 상태와 검색어 관리
+    const [loading, setLoading] = useState(false);
+
+    // 페이징 상태 관리
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+    const totalPages = Math.ceil(books.length / itemsPerPage);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentItems = books.slice(startIndex, startIndex + itemsPerPage);
+
     useEffect(() => {
+        // 백엔드에서 데이터 가져오기
         const fetchBooks = async () => {
             setLoading(true);
             try {
@@ -18,7 +33,7 @@ const Search = () => {
                     throw new Error(`Error: ${response.statusText}`);
                 }
                 const data = await response.json();
-                setBooks(data);
+                setBooks(data); // Context에 책 데이터 저장
             } finally {
                 setLoading(false);
             }
@@ -27,25 +42,22 @@ const Search = () => {
         if (query) {
             fetchBooks();
         } else {
-            setBooks([]);
+            setBooks([]); // 검색어가 없으면 책 목록을 초기화
             setLoading(false);
         }
     }, [query]);
 
-    // Pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12;
-    const totalPages = Math.ceil(books.length / itemsPerPage);
-
-    // Get current page items
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = books.slice(startIndex, startIndex + itemsPerPage);
-
-    // Handle page change
+    // 페이지 변환 관리
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
+    // 도서 선택 후 페이지 이동
+    const handleBookClick = (book) => {
+        setSelectedBook(book); // 선택된 책을 Context에 저장
+        navigate(`/book/info`);
+        // navigate(`/book/${book.isbn}`);
+    };
     return (
         <div className="flex-1 p-4 bg-gray-900 text-white">
             {loading && <p>Loading...</p>}
@@ -57,14 +69,17 @@ const Search = () => {
                     {/*도서 리스트*/}
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                         {currentItems.map((book) => (
-                            <li key={book.id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                                <Link to={`/books/${book.isbn}`} className="block">
-                                    <img src={book.image} alt={book.title} className="w-full h-32 object-cover" />
-                                    <div className="p-4">
-                                        <h3 className="text-lg font-semibold mb-2">{book.title}</h3>
-                                        <p className="text-sm text-gray-400">by {book.author}</p>
-                                    </div>
-                                </Link>
+                            <li
+                                key={book.isbn}
+                                className="bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
+                                onClick={() => handleBookClick(book)}
+                            >
+                                <h1>{book.isbn}</h1>
+                                <img src={book.image} alt={book.title} className="w-full h-32 object-cover" />
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold mb-2">{book.title}</h3>
+                                    <p className="text-sm text-gray-400">by {book.author}</p>
+                                </div>
                             </li>
                         ))}
                     </ul>
@@ -95,4 +110,4 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default BookSearch;

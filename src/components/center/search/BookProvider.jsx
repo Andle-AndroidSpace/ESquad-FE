@@ -1,14 +1,15 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 // Context 생성
 const BookContext = createContext();
 
 // Context Provider 컴포넌트
 export const BookProvider = ({ children }) => {
-    const [book, setBook] = useState(null); // 상태로 book 데이터를 관리
+    const [books, setBooks] = useState([]); // 상태로 book 데이터를 관리
+    const [selectedBook, setSelectedBook] = useState([]);
 
     return (
-        <BookContext.Provider value={{ book, setBook }}>
+        <BookContext.Provider value={{ books, setBooks, selectedBook, setSelectedBook }}>
             {children}
         </BookContext.Provider>
     );
@@ -18,3 +19,6 @@ export const BookProvider = ({ children }) => {
 export const useBook = () => {
     return useContext(BookContext);
 };
+
+
+export default BookProvider
