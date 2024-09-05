@@ -100,7 +100,7 @@ const NewQuestion = ({ onSubmit }) => {
                                 type="text"
                                 value={writer}
                                 onChange={(e) => setWriter(e.target.value)}
-                                placeholder="Writer (Enter your name)"
+                                placeholder="작성자"
                                 className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -110,7 +110,7 @@ const NewQuestion = ({ onSubmit }) => {
                                 type="text"
                                 value={book}
                                 onChange={handleBookSearch}
-                                placeholder="Related Book (Search for a book...)"
+                                placeholder="책제목"
                                 className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             {bookSuggestions.length > 0 && (
@@ -135,7 +135,7 @@ const NewQuestion = ({ onSubmit }) => {
                             type="text"
                             value={questionTitle}
                             onChange={(e) => setQuestionTitle(e.target.value)}
-                            placeholder="Question Title (Briefly describe your question...)"
+                            placeholder="제목"
                             className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -144,7 +144,7 @@ const NewQuestion = ({ onSubmit }) => {
                         <textarea
                             value={questionContent}
                             onChange={(e) => setQuestionContent(e.target.value)}
-                            placeholder="Question Content (Provide more details about your question...)"
+                            placeholder=""
                             className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows="6"
                         />
