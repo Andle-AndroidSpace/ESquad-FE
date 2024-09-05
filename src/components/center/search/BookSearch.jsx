@@ -55,8 +55,7 @@ const BookSearch = () => {
     // 도서 선택 후 페이지 이동
     const handleBookClick = (book) => {
         setSelectedBook(book); // 선택된 책을 Context에 저장
-        navigate(`/book/info`);
-        // navigate(`/book/${book.isbn}`);
+        navigate(`/book/${book.isbn}`);
     };
     return (
         <div className="flex-1 p-4 bg-gray-900 text-white">
