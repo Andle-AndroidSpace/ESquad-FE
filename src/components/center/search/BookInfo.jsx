@@ -1,17 +1,19 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useBook} from './BookProvider.jsx';
 import BookRecognize from "./BookRecognize.jsx";
 import {useParams} from "react-router-dom";
 
 const BookInfo = () => {
-    const [expanded, setExpanded] = useState(false);
     const { isbn } = useParams();
+    const {selectedBook, setSelectedBook} = useBook(); // books 데이터를 Context에서 가져옴
+
+    const [expanded, setExpanded] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const toggleExpand = () => {
         setExpanded(!expanded);
     };
-
-    const {selectedBook} = useBook(); // books 데이터를 Context에서 가져옴
 
     // 날짜 형식 변환 함수
     const formatDate = (pubdate) => {
@@ -35,17 +37,48 @@ const BookInfo = () => {
     }
 
     // book 객체가 유효한 경우 그 값을 분해하여 사용
-    const { title, author, description = '설명 없음', image, publisher = "출판사 없음", pubdate, link} = selectedBook;
+    const { title, author='작자 미상', description = '설명 없음', image='이미지 없음', publisher = "출판사 없음", pubdate=' ', link} = selectedBook;
 
-
+    // title => 본제목 + 소제목
     const titleWithoutParentheses = title.replace(/\(.*?\)/, '').trim();  // 괄호 안의 내용 제거
     const parenthesesContent = title.match(/\((.*?)\)/)?.[1];  // 괄호 안의 내용 추출
     const truncatedDescription = description.length > 200 ? description.slice(0, 200) + '...' : description;
+
+    // 예시로 백엔드에서 데이터를 가져온다고 가정
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        const fetchBook = async () => {
+            setLoading(true);
+            setError(null); // reset any previous error
+            try {
+                const response = await fetch(`/api/book/search?query=${encodeURIComponent(selectedBook.isbn)}`);
+                const data = await response.json();
+                setSelectedBook(data[0]); // Context에 책 데이터 저장
+                // eslint-disable-next-line no-unused-vars
+            } catch (error) {
+                setError("책 데이터를 불러오는 중 오류가 발생했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBook();
+    }, [isbn]);
+
+    if (loading) {
+        return (
+            <div className="flex-1 p-4 bg-gray-900 text-white">
+                <h2>책 정보를 불러오는 중입니다...</h2>
+            </div>
+        );
+    }
+
 
     return (
 
         <div className="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-lg transition-all duration-300 ease-in-out">
             {/* 도서 정보 상단 */}
+            {error && <p className="text-red-500">{error}</p>}
             <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10">
                 {/* 도서 이미지 */}
                 <div className="relative w-full md:w-2/5"> {/* 이미지 크기를 반으로 설정 */}
