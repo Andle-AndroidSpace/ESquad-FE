@@ -2,21 +2,23 @@ import { Route, Routes } from "react-router-dom";
 import Study from "../../pages/study/Study";
 import Note from "./note/Note";
 import Qboard from "./qboard/Qboard";
-import Search from "./search/Search";
 import StudyPage from "./study/StudyPage";
-
-
+import BookSearch from "./search/BookSearch.jsx";
+import BookInfo from "./search/BookInfo.jsx";
+import BookProvider from "./search/BookProvider.jsx";
 
 const Center = () => {
     return (
-        <Routes>
-            {/* <Route path="/user/profie" element={} /> */}
-            <Route path="/pages/memo" element={<Note />} />
-            <Route path="/board/questions" element={<Qboard />} />
-            <Route path="/pages/search" element={<Search />} />
-            <Route path="/pages/studypages" element={<Study />} />
-            <Route path='/pages/studypages/:no' element={<StudyPage />} />
-        </Routes>
+        <BookProvider>
+            <Routes>
+                <Route path="/pages/memo" element={<Note/>}/>
+                <Route path="/board/questions" element={<Qboard/>}/>
+                <Route path="/book/search" element={<BookSearch/>}/>
+                <Route path="/book/:isbn" element={<BookInfo/>}/>
+                <Route path="/pages/studypages" element={<Study/>}/>
+                <Route path='/pages/studypages/:no' element={<StudyPage/>}/>
+            </Routes>
+        </BookProvider>
     );
 }
 

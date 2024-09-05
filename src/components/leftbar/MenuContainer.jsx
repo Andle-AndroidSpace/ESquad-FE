@@ -7,9 +7,9 @@ const MenuContainer = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
-    const handleSearch = (e) => {
+    const handleBookSearch = (e) => {
         e.preventDefault();
-        navigate(`/pages/search?query=${encodeURIComponent(searchQuery)}`);
+        navigate(`/book/search?query=${encodeURIComponent(searchQuery)}`);
     };
 
     return (
@@ -23,10 +23,10 @@ const MenuContainer = () => {
 
             {/* Search */}
             <div className="relative flex items-center max-w-xs">
-                <form onSubmit={handleSearch} className="w-full">
+                <form onSubmit={handleBookSearch} className="w-full">
                     <input
                         type="text"
-                        placeholder="찾고싶은 도서는?"
+                        placeholder="찾고 싶은 도서는?"
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full p-2 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
