@@ -7,14 +7,14 @@ import Login from "./pages/login/Login";
 
 const App = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
 
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                 <Route path="/join" element={<Join />} />
-                <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
+                <Route path="*" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
             </Routes>
         </BrowserRouter>
     );
