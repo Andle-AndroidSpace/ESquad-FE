@@ -4,14 +4,14 @@ import ChatInput from './ChatInput';
 import ChatMessages from './ChatMessages';
 
 const ChatContent = () => {
-   return (
+   return ( 
         <>
             <div className="flex flex-1 flex-col h-full">
                 {/* Chat Messages */}
                 <ChatMessages />
 
-                {/*/!* Chat Input *!/*/}
-                {/*<ChatInput />*/}
+                {/* Chat Input */}
+                <ChatInput />
             </div>
 
             {/* Chat Channels */}
@@ -21,5 +21,5 @@ const ChatContent = () => {
         </>
     );
 }
-
+ 
 export default ChatContent;
