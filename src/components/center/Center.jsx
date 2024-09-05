@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Study from "../../pages/study/Study";
 import Note from "./note/Note";
 import Qboard from "./qboard/Qboard";
@@ -8,12 +8,11 @@ import BookInfo from "./search/BookInfo.jsx";
 import BookProvider from "./search/BookProvider.jsx";
 
 const Center = () => {
-
     return (
         <BookProvider>
             <Routes>
                 <Route path="/pages/memo" element={<Note/>}/>
-                <Route path="/pages/question" element={<Qboard/>}/>
+                <Route path="/board/questions" element={<Qboard/>}/>
                 <Route path="/book/search" element={<BookSearch/>}/>
                 <Route path="/book/:isbn" element={<BookInfo/>}/>
                 <Route path="/pages/studypages" element={<Study/>}/>

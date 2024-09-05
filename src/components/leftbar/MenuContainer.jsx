@@ -15,7 +15,7 @@ const MenuContainer = () => {
     return (
 
         // menuContainer
-        <div className="h-menu-c p-2 space-y-4 m-2 ">
+        <div className="h-menu-c p-2 space-y-4 m-2">
 
             <div className="relative flex justify-center">
                 <h3 className="text-center text-lg">팀스페이스명</h3>
@@ -36,8 +36,8 @@ const MenuContainer = () => {
             {/* Menu List */}
             <div className="space-y-2 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-800">
                 <MenuLink link={"/pages/memo"} menu="메모" />
-                <MenuLink link={"/pages/question"} menu="질문" />
-                <MenuLink link={"/studypage"} menu="스터디룸" />
+                <MenuLink link={"/board/questions"} menu="질문" />
+                <MenuLink link={"/pages/studypages"} menu="스터디룸" />
             </div>
 
         </div>

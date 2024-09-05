@@ -63,7 +63,7 @@ const BookInfo = () => {
         };
 
         fetchBook();
-    }, [isbn]);
+    }, [isbn, selectedBook.isbn, setSelectedBook]);
 
     if (loading) {
         return (
@@ -81,7 +81,7 @@ const BookInfo = () => {
             {error && <p className="text-red-500">{error}</p>}
             <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10">
                 {/* 도서 이미지 */}
-                <div className="relative w-full md:w-2/5"> {/* 이미지 크기를 반으로 설정 */}
+                <div className="relative w-full md:w-2/5">
                     <img
                         src={image}
                         alt={title}

@@ -45,7 +45,7 @@ const BookSearch = () => {
             setBooks([]); // 검색어가 없으면 책 목록을 초기화
             setLoading(false);
         }
-    }, [query]);
+    }, [query, setBooks]);
 
     // 페이지 변환 관리
     const handlePageChange = (pageNumber) => {
@@ -61,6 +61,7 @@ const BookSearch = () => {
         <div className="flex-1 p-4 bg-gray-900 text-white">
             {loading && <p>Loading...</p>}
             {!loading && books.length === 0 && (
+                // eslint-disable-next-line react/no-unescaped-entities
                 <h2 className="text-2xl font-bold mb-4">"{query}"에 대한 도서 정보가 없습니다.</h2>
             )}
             {books.length > 0 && (
