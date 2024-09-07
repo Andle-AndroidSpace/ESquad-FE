@@ -27,7 +27,7 @@ const QuestionList = ({ questions, currentPage, questionsPerPage, onPageChange }
                             </td>
                             <td className="p-2 border-b border-gray-600 text-center">{q.book}</td>
                             <td className="p-2 border-b border-gray-600 text-center">
-                                <Link to={`/questions/${q.id}`} className="text-blue-400 hover:underline">
+                                <Link to={`/board/questions/${q.id}`} className="text-blue-400 hover:underline">
                                     {q.title}
                                 </Link>
                             </td>
