@@ -85,11 +85,13 @@ const NewQuestion = ({ onSubmit }) => {
 
     return (
         <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-white">Post a Question</h2>
-                <button onClick={() => setIsExpanded(!isExpanded)} className="text-white">
-                    {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
+            <div className="flex items-center mb-4">
+                <h2
+                    className="text-2xl font-bold text-white cursor-pointer"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
+                    글쓰기✏️
+                </h2>
             </div>
 
             {isExpanded && (
@@ -102,7 +104,7 @@ const NewQuestion = ({ onSubmit }) => {
                                 onChange={(e) => setWriter(e.target.value)}
                                 placeholder="작성자"
                                 className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                                required/>
                         </div>
 
                         <div className="flex flex-col w-3/5 space-y-2 relative">
@@ -112,7 +114,7 @@ const NewQuestion = ({ onSubmit }) => {
                                 onChange={handleBookSearch}
                                 placeholder="책제목"
                                 className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                                required/>
                             {bookSuggestions.length > 0 && (
                                 <div className="absolute top-full mt-1 w-full bg-gray-700 rounded-lg shadow-lg z-10">
                                     {bookSuggestions.map((book) => (
@@ -121,7 +123,7 @@ const NewQuestion = ({ onSubmit }) => {
                                             className="flex items-center p-2 hover:bg-gray-600 cursor-pointer"
                                             onClick={() => handleBookSelect(book.title)}
                                         >
-                                            <img src={book.image} alt={book.title} className="w-10 h-10 mr-2" />
+                                            <img src={book.image} alt={book.title} className="w-10 h-10 mr-2"/>
                                             <span>{book.title}</span>
                                         </div>
                                     ))}
@@ -135,19 +137,19 @@ const NewQuestion = ({ onSubmit }) => {
                             type="text"
                             value={questionTitle}
                             onChange={(e) => setQuestionTitle(e.target.value)}
-                            placeholder="제목"
+                            placeholder="제목을 입력해 주세요."
                             className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                            required/>
                     </div>
 
                     <div className="flex flex-col space-y-2">
                         <textarea
                             value={questionContent}
                             onChange={(e) => setQuestionContent(e.target.value)}
-                            placeholder=""
+                            placeholder="내용을 입력해 주세요."
                             className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows="6"
-                        />
+                            required/>
                     </div>
 
                     <div className="flex flex-col space-y-2">
@@ -159,7 +161,7 @@ const NewQuestion = ({ onSubmit }) => {
                         {file && (
                             <div className="mt-2">
                                 {text ? (
-                                    <img src={text} alt="Preview" className="max-w-xs rounded-lg" />
+                                    <img src={text} alt="Preview" className="max-w-xs rounded-lg"/>
                                 ) : (
                                     <p className="text-gray-400">Selected file: {file.name}</p>
                                 )}
