@@ -6,6 +6,7 @@ import StudyPage from "./study/StudyPage";
 import BookSearch from "./search/BookSearch.jsx";
 import BookInfo from "./search/BookInfo.jsx";
 import BookProvider from "./search/BookProvider.jsx";
+import StudyPageCreate from "./study/StudyPageCreate.jsx";
 
 const Center = () => {
     return (
@@ -17,6 +18,7 @@ const Center = () => {
                 <Route path="/book/:isbn" element={<BookInfo/>}/>
                 <Route path="/pages/studypages" element={<Study/>}/>
                 <Route path='/pages/studypages/:no' element={<StudyPage/>}/>
+                <Route path='/studyPage/create' element={<StudyPageCreate/>}/>
             </Routes>
         </BookProvider>
     );
