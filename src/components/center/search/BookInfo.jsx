@@ -1,11 +1,13 @@
 import {useEffect, useState} from 'react';
 import {useBook} from './BookProvider.jsx';
 import BookRecognize from "./BookRecognize.jsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+
 
 const BookInfo = () => {
     const { isbn } = useParams();
     const {selectedBook, setSelectedBook} = useBook(); // books 데이터를 Context에서 가져옴
+    const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
 
     const [expanded, setExpanded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -72,7 +74,9 @@ const BookInfo = () => {
             </div>
         );
     }
-
+    const goToStudyPageCreate = () => {
+        navigate(`/studyPage/create`);
+    };
 
     return (
 
@@ -133,18 +137,14 @@ const BookInfo = () => {
                     <button
                         onClick={toggleExpand}
                         className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ease-in-out"
-                    >
-                        +
-                    </button>
-
-                    {/* 위로 확장되는 두 개의 추가 버튼 */}
+                    > + </button>
                     <div
                         className={`flex flex-col items-center transition-all duration-300 ease-in-out ${
                             expanded ? 'mt-4 opacity-100' : 'mt-0 opacity-0 pointer-events-none'
                         }`}
                     >
                         <button
-                            onClick={() => window.location.href = "/page1"}
+                            onClick={goToStudyPageCreate}
                             className="w-10 h-10 bg-green-500 text-white rounded-full mt-2 shadow-lg"
                         >
                             1
@@ -191,4 +191,3 @@ const BookInfo = () => {
     );
 };
 export default BookInfo;
-
