@@ -18,7 +18,7 @@ const Center = () => {
                 <Route path="/book/:isbn" element={<BookInfo/>}/>
                 <Route path="/pages/studypages" element={<Study/>}/>
                 <Route path='/pages/studypages/:no' element={<StudyPage/>}/>
-                <Route path='/studyPage/create' element={<StudyPageCreate/>}/>
+                <Route path='/:teamId/studyPage/create' element={<StudyPageCreate/>}/>
             </Routes>
         </BookProvider>
     );

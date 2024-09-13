@@ -75,7 +75,7 @@ const BookInfo = () => {
         );
     }
     const goToStudyPageCreate = () => {
-        navigate(`/studyPage/create`);
+        navigate(`/100/studyPage/create`);
     };
 
     return (
