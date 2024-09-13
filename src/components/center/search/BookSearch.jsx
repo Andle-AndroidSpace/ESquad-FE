@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import { useBook } from './BookProvider.jsx';
+import axios from 'axios'
 
 const BookSearch = () => {
 
@@ -10,7 +11,6 @@ const BookSearch = () => {
 
     const { books, setBooks, setSelectedBook } = useBook(); // Context에서 상태 관리
     const navigate = useNavigate();
-
 
     // 로딩 상태와 검색어 관리
     const [loading, setLoading] = useState(false);
@@ -26,14 +26,13 @@ const BookSearch = () => {
     useEffect(() => {
         // 백엔드에서 데이터 가져오기
         const fetchBooks = async () => {
-            setLoading(true);
             try {
-                const response = await fetch(`/api/book/search?query=${encodeURIComponent(query)}`);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-                const data = await response.json();
-                setBooks(data); // Context에 책 데이터 저장
+                setLoading(true);
+                const response = await axios.get(`/api/book/search?query=${query}`);
+                console.log(response);
+                setBooks(response.data);  // Assuming the book data is in response.data
+            } catch (error) {
+                console.log(error);
             } finally {
                 setLoading(false);
             }
@@ -57,6 +56,7 @@ const BookSearch = () => {
         setSelectedBook(book); // 선택된 책을 Context에 저장
         navigate(`/book/${book.isbn}`);
     };
+
     return (
         <div className="flex-1 p-4 bg-gray-900 text-white">
             {loading && <p>Loading...</p>}

@@ -2,19 +2,32 @@ import {useEffect, useState} from 'react';
 import {useBook} from './BookProvider.jsx';
 import BookRecognize from "./BookRecognize.jsx";
 import {useNavigate, useParams} from "react-router-dom";
+import axios from "axios";
 
 
 const BookInfo = () => {
+    // 주소에서 isbn 값 가져오기
     const { isbn } = useParams();
-    const {selectedBook, setSelectedBook} = useBook(); // books 데이터를 Context에서 가져옴
-    const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
+    // context 선택된 Book 정보 가져오기
+    const {selectedBook, setSelectedBook} = useBook();
+    // React Router 의 useNavigate 훅 사용하여 study create
+    const navigate = useNavigate();
 
+    // 요일 선택장 확장
     const [expanded, setExpanded] = useState(false);
+    // 정보 불러오는 과정
     const [loading, setLoading] = useState(false);
+    // 에러 상태 정보 저장
     const [error, setError] = useState(null);
 
+    // 요일 토글 함수
     const toggleExpand = () => {
         setExpanded(!expanded);
+    };
+
+    // 생성 페이지로 이동 함수
+    const goToStudyPageCreate = () => {
+        navigate(`/100/studyPage/create`);
     };
 
     // 날짜 형식 변환 함수
@@ -28,16 +41,6 @@ const BookInfo = () => {
         return `${year}/${month}/${day}`;
     };
 
-    // book 객체가 없거나 필수 속성이 없는 경우
-    if (!selectedBook || !selectedBook.title || !selectedBook.author) {
-        return (
-            <div className="flex-1 p-4 bg-gray-900 text-white">
-                <h2>책 정보를 찾을 수 없습니다.</h2>
-                <p>책 정보가 잘못되었거나 누락되었습니다. 😢</p>
-            </div>
-        );
-    }
-
     // book 객체가 유효한 경우 그 값을 분해하여 사용
     const { title, author='작자 미상', description = '설명 없음', image='이미지 없음', publisher = "출판사 없음", pubdate=' ', link} = selectedBook;
 
@@ -46,40 +49,56 @@ const BookInfo = () => {
     const parenthesesContent = title.match(/\((.*?)\)/)?.[1];  // 괄호 안의 내용 추출
     const truncatedDescription = description.length > 200 ? description.slice(0, 200) + '...' : description;
 
-    // 예시로 백엔드에서 데이터를 가져온다고 가정
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    // 리렌더 시, 백엔드에서 데이터 가져오기
     useEffect(() => {
+        // 백엔드에서 데이터 가져오기
         const fetchBook = async () => {
-            setLoading(true);
-            setError(null); // reset any previous error
             try {
-                const response = await fetch(`/api/book/search?query=${encodeURIComponent(selectedBook.isbn)}`);
-                const data = await response.json();
-                setSelectedBook(data[0]); // Context에 책 데이터 저장
-                // eslint-disable-next-line no-unused-vars
+                setLoading(true);
+                const response = await axios.get(`/api/book/search?query=${isbn}`);
+                console.log(response);
+                setSelectedBook(response.data[0]);  // Assuming the book data is in response.data
             } catch (error) {
-                setError("책 데이터를 불러오는 중 오류가 발생했습니다.");
+                console.log(error);
+                setError(error);
             } finally {
                 setLoading(false);
             }
+
+            // 로딩 하는 경우
+            if (loading) {
+                return (
+                    <div className="flex-1 p-4 bg-gray-900 text-white">
+                        <h2>책 정보를 불러오는 중입니다...</h2>
+                    </div>
+                );
+            }
+
+            // 에러가 발생한 경우
+            if (error) {
+                return (
+                    <div className="flex-1 p-4 bg-gray-900 text-white">
+                        <h2>오류 발생: {error}</h2>
+                    </div>
+                );
+            }
         };
 
-        fetchBook();
-    }, [isbn, selectedBook.isbn, setSelectedBook]);
+        // book 객체가 없거나 필수 속성이 없는 경우
+        if (!selectedBook || !selectedBook.title || !selectedBook.author|| !selectedBook.isbn) {
+            fetchBook(); // Fetch if selectedBook is missing
+            setLoading(false);
+            return (
+                <div className="flex-1 p-4 bg-gray-900 text-white">
+                    <h2>책 정보를 찾을 수 없습니다.</h2>
+                    <p>책 정보가 잘못되었거나 누락되었습니다. 😢</p>
+                </div>
+            );
+        }
 
-    if (loading) {
-        return (
-            <div className="flex-1 p-4 bg-gray-900 text-white">
-                <h2>책 정보를 불러오는 중입니다...</h2>
-            </div>
-        );
-    }
-    const goToStudyPageCreate = () => {
-        navigate(`/100/studyPage/create`);
-    };
+    }, [isbn, selectedBook, setSelectedBook]);
 
     return (
-
         <div className="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-lg transition-all duration-300 ease-in-out">
             {/* 도서 정보 상단 */}
             {error && <p className="text-red-500">{error}</p>}
