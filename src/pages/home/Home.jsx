@@ -2,8 +2,11 @@ import Center from "../../components/center/Center";
 import Leftbar from "../../components/leftbar/Leftbar";
 import Header from "../../components/navbar/Header";
 import Rightbar from "../../components/rightbar/Rightbar";
+import React from 'react';
 
 const Home = () => {
+
+
    return ( 
       <div className="w-full flex flex-col h-screen">
          <Header />
