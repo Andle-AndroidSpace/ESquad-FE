@@ -25,12 +25,11 @@ const useAxios = ({ url, method = 'GET', body = null, headers = {} }) => {
         }
     };
 
-    // GET 요청일 때만 자동으로 데이터를 불러옴
     useEffect(() => {
         if (method === 'GET' && url) {
             fetchData();
         }
-    }, [url, method]); // url이나 method가 변경될 때만 실행
+    }, [url, method]);
 
     return { data, error, loading, refetch: fetchData };
 };
