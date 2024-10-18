@@ -6,8 +6,8 @@ const BookContext = createContext();
 // Context Provider 컴포넌트
 export const BookProvider = ({ children }) => {
     const [books, setBooks] = useState([]); // 상태로 book 데이터를 관리
-    const [selectedBook, setSelectedBook] = useState([]);
-
+    const book = localStorage.getItem('selectedBook')
+    const [selectedBook, setSelectedBook] = useState(book||[]);
     return (
         <BookContext.Provider value={{ books, setBooks, selectedBook, setSelectedBook }}>
             {children}
@@ -15,7 +15,7 @@ export const BookProvider = ({ children }) => {
     );
 };
 
-// Context Consumer 훅
+// Context
 export const useBook = () => {
     return useContext(BookContext);
 };
