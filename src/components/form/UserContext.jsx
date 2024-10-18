@@ -8,7 +8,7 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
 
-    // 커스텀 useAxios 훅을 사용하여 사용자 정보를 가져옴
+
     const { data, error, loading, refetch } = useAxios({
         url: 'http://localhost:8080/api/users/inquiry',
         method: 'GET',
@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         if (data) {
-            setUserInfo(data.data); // 데이터가 있을 때만 사용자 정보 업데이트
+            setUserInfo(data.data);
         }
         if (error) {
             console.error('사용자 정보를 불러오는 중 오류가 발생했습니다:', error);
@@ -24,8 +24,8 @@ export const UserProvider = ({ children }) => {
     }, [data, error]);
 
     const clearUserInfo = () => {
-        setUserInfo(null); // 사용자 정보 초기화
-        localStorage.removeItem('jwt'); // JWT 토큰 삭제
+        setUserInfo(null);
+        localStorage.removeItem('jwt');
     };
 
     return (

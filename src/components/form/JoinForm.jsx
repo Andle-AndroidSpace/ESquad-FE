@@ -85,9 +85,9 @@ const JoinForm = () => {
     setFormData((prev) => ({ ...prev, password: value }));
 
     // 비밀번호 유효성 검사
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*\\d)(?=.*[!~&+@])[a-z\\d!~&+@]{6,16}$/;
     if (!passwordRegex.test(value)) {
-      setPasswordError('비밀번호는 8~16자이며, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.');
+      setPasswordError('비밀번호는 6~16자이며, 소문자, 숫자, 특수문자를 포함해야 합니다.');
     } else if (formData.confirmPassword && value !== formData.confirmPassword) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
     } else {
@@ -111,9 +111,9 @@ const JoinForm = () => {
     setFormData((prev) => ({ ...prev, username: value }));
 
     // 아이디 유효성 검사
-    const usernameRegex = /^[a-zA-Z]{8,12}$/;
+    const usernameRegex = /^[a-zA-Z0-9]{6,12}$/;
     if (!usernameRegex.test(value)) {
-      setUsernameError('아이디는 영문자만 사용하며 8~12자여야 합니다.');
+      setUsernameError('아이디는 영어와 숫자로 구성된 6~12자여야 합니다.');
     } else {
       setUsernameError('');
     }
