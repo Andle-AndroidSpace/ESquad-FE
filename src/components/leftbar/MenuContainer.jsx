@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import MenuLink from './MenuLink';
 
 const MenuContainer = () => {
@@ -11,7 +11,7 @@ const MenuContainer = () => {
         e.preventDefault();
         navigate(`/book/search?query=${encodeURIComponent(searchQuery)}`);
     };
-
+    const teamId= 100;
     return (
 
         // menuContainer
@@ -37,9 +37,8 @@ const MenuContainer = () => {
             <div className="space-y-2 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-800">
                 <MenuLink link={"/pages/memo"} menu="메모" />
                 <MenuLink link={"/board/questions"} menu="질문" />
-                <MenuLink link={"/pages/studypages"} menu="스터디룸" />
+                <MenuLink link={`/${teamId}/study-pages`} menu="스터디룸" />
             </div>
-
         </div>
     );
 };

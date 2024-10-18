@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useBook } from "../search/BookProvider.jsx";
+import { useBook } from "../book/BookProvider.jsx";
 import { useParams } from "react-router-dom";
 import { TextField, Button, Grid2, MenuItem, Box, Typography, Container, Select, InputLabel, FormControl } from "@mui/material";
 
@@ -29,8 +29,6 @@ const StudyPageCreate = () => {
     { label: "Sunday", value: 6 },
   ];
 
-
-
   const handleChange = (field, value) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -53,7 +51,7 @@ const StudyPageCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+      localStorage.removeItem("book");
     if (!selectedBook) {
       console.error("selectedBook 값이 설정되지 않았습니다.");
       return;
@@ -67,8 +65,8 @@ const StudyPageCreate = () => {
     };
 
     try {
-      await axios.post(`/api/${numericTeamId}/studyPage/create`, studyPageDto);
-      console.log("Study page created successfully!");
+      await axios.post(`/api/${numericTeamId}/study-pages`, studyPageDto);
+      console.log("StudyRead page created successfully!");
     } catch (error) {
       console.error("Error creating study page:", error);
       setErrorMessage("An error occurred while creating the study page. Please try again.");
@@ -107,16 +105,16 @@ const StudyPageCreate = () => {
                 },
               }}
           >
-            Create a New Study Page
+            Create a New StudyRead Page
           </Typography>
           {errorMessage && <Typography color="error">{errorMessage}</Typography>}
 
-          {/* Study Page Name */}
+          {/* StudyRead Page Name */}
           <Grid2 container spacing={2} direction="column" alignItems="center">
             <Grid2 item xs={12} sx={{ width: "100%" }}>
               <TextField
                   fullWidth
-                  label="Study Page Name"
+                  label="StudyRead Page Name"
                   variant="outlined"
                   value={formData.studyPageName}
                   onChange={(e) => handleChange("studyPageName", e.target.value)}
@@ -242,7 +240,7 @@ const StudyPageCreate = () => {
             {/* Submit Button */}
             <Grid2 item xs={12} sx={{ width: "100%" }}>
               <Button type="submit" variant="contained" color="success" fullWidth sx={{ mt: 3 }}>
-                Create Study Page
+                Create StudyRead Page
               </Button>
             </Grid2>
           </Grid2>
