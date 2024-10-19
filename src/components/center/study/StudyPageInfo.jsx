@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from "prop-types";
 
-const StudyPage = ({title, author, publishedDate, description, image}) => {
+const StudyPageInfo = ({title, author, publishedDate, description, image}) => {
   const {no} = useParams(); // URL 파라미터에서 no를 가져옴
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -156,7 +156,7 @@ const StudyPage = ({title, author, publishedDate, description, image}) => {
   );
 };
 
-StudyPage.propTypes = { // 노란줄 안 뜨게 하려고 배열 내부 객체에 대한 명시
+StudyPageInfo.propTypes = { // 노란줄 안 뜨게 하려고 배열 내부 객체에 대한 명시
   uploadedFiles: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
@@ -168,4 +168,4 @@ StudyPage.propTypes = { // 노란줄 안 뜨게 하려고 배열 내부 객체�
       })
   ).isRequired,
 };
-export default StudyPage;
+export default StudyPageInfo;
