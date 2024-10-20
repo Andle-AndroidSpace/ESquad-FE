@@ -80,13 +80,16 @@ const JoinForm = () => {
     }
   };
 
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[!~&+@])[a-z\d!~&+@]{6,16}$/;
+    return passwordRegex.test(password);
+  };
+
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, password: value }));
 
-    // 비밀번호 유효성 검사
-    const passwordRegex = /^(?=.*[a-z])(?=.*\\d)(?=.*[!~&+@])[a-z\\d!~&+@]{6,16}$/;
-    if (!passwordRegex.test(value)) {
+    if (!validatePassword(value)) {
       setPasswordError('비밀번호는 6~16자이며, 소문자, 숫자, 특수문자를 포함해야 합니다.');
     } else if (formData.confirmPassword && value !== formData.confirmPassword) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
@@ -99,7 +102,9 @@ const JoinForm = () => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, confirmPassword: value }));
 
-    if (formData.password && value !== formData.password) {
+    if (!validatePassword(formData.password)) {
+      setPasswordError('비밀번호가 규칙에 맞지 않습니다.');
+    } else if (value !== formData.password) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
     } else {
       setPasswordError('');
@@ -233,7 +238,14 @@ const JoinForm = () => {
     }
 
     try {
-      const response = await axios.post('/api/users', formData);
+      const updatedFormData = {
+        ...formData,
+        address: formData.address,
+        detailAddress: formData.detailAddress,
+        extraAddress: formData.extraAddress
+      };
+
+      const response = await axios.post('/api/users', updatedFormData);
       setSubmitMessage(response.data);
       alert('회원가입이 성공적으로 완료되었습니다!');
       navigate('/login');
