@@ -8,12 +8,11 @@ const StudyPage = ({title, author, publishedDate, description, image}) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userId = 1; // 임의의 userId
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get(`/api/files/BOOK_PAGE/${no}`);
+        const response = await axios.get(`/api/files/STUDY_PAGE/${no}`);
         setUploadedFiles(response.data);
       } catch (error) {
         console.error('Failed to fetch files:', error);
@@ -35,12 +34,14 @@ const StudyPage = ({title, author, publishedDate, description, image}) => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('targetId', no);
-    formData.append('targetType', 'BOOK_PAGE');
+    formData.append('targetType', 'STUDY_PAGE');
 
     try {
-      const response = await axios.post(`/api/files/${userId}`, formData, {
+      const token = localStorage.getItem('jwt');
+      const response = await axios.post(`/api/files`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         },
       });
       setUploadedFiles((prevFiles) => [...prevFiles, response.data]);
@@ -146,7 +147,8 @@ const StudyPage = ({title, author, publishedDate, description, image}) => {
             <button
                 onClick={handleFileUpload}
                 disabled={isUploading} // 업로드 중이면 버튼 비활성화
-                className={`w-full py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-300 shadow-lg ${isUploading ? 'cursor-not-allowed opacity-50' : ''}`}
+                className={`w-full py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-300 shadow-lg ${isUploading
+                    ? 'cursor-not-allowed opacity-50' : ''}`}
             >
               {isUploading ? '업로드 중...' : '등록'}
             </button>
