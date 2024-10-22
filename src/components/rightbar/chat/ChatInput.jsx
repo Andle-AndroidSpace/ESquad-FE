@@ -1,44 +1,99 @@
-import React from 'react';
-import { FaPaperPlane } from 'react-icons/fa';
+import React, {useState} from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
+import FilePreview from './components/FilePreview';
 
 const ChatInput = ({
-                       editMessageId,
-                       editMessage,
-                       setEditMessage,
                        message,
-                       setMessage,
-                       handleKeyDown,
-                       sendMessage,
-                       saveEditMessage,
-                       userId
+                       onMessageChange,
+                       userId,
+                       handleUploadClick,
+                       editMessageId,
+                       onSaveMessage,
+                       handleSend,
+                       handleRemoveFile,
+                       selectedFile,
+                       handleSendMessage
                    }) => {
-    const handleButtonClick = () => {
-        if (editMessageId) {
-            saveEditMessage();
+    const handleSendClick = () => {
+        if (selectedFile) {
+            // 파일이 선택된 경우
+            handleSend(''); // 메시지 없이 파일만 전송
+            onMessageChange({ target: { value: '' } }); // 메시지 입력 필드를 비웁니다.
+        } else if (message.trim()) {
+            // 메시지가 있는 경우
+            if (editMessageId) {
+                onSaveMessage();
+            } else {
+                handleSend(message, null); // 메시지 전송
+            }
         } else {
-            sendMessage();
+            alert("메시지를 입력해주세요.");
         }
     };
 
     return (
-        <div className="flex items-center h-14 bg-gray-900 p-2 shadow-lg">
-            <input
-                type="text"
-                value={editMessageId ? editMessage : message}
-                onChange={(e) => editMessageId ? setEditMessage(e.target.value) : setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
+        <Box
+            display="flex"
+            alignItems="center"
+            sx={{
+                flexDirection: 'row',
+                padding: '0.5rem',
+                backgroundColor: '#1f2937',
+                borderRadius: '4px',
+                height: 'auto'
+            }}
+        >
+            {selectedFile ? (
+                // 파일이 선택된 경우, TextField를 숨김
+                <Box sx={{ display: 'flex',
+                           alignItems: 'center',
+                           marginRight: '8px' }}>
+                    <FilePreview file={selectedFile} />
+                    <IconButton color="error" onClick={handleRemoveFile} aria-label="파일 제거">
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
+            ) : (
+                <TextField
+                    hiddenLabel
+                    id="filled-hidden-label-normal"
+                    variant="filled"
+                    placeholder="Message Input :P !!"
+                    value={message}
+                    onChange={onMessageChange}
+                    disabled={!userId}
+                    fullWidth
+                    sx={{
+                        marginBottom: '0.5rem',
+                        '& .MuiInputBase-input': {
+                            color: 'white',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                            color: 'white',
+                            opacity: 0.8,
+                        },
+                    }}
+                />
+            )}
+            <IconButton color="success" onClick={handleUploadClick} disabled={!userId} aria-label="파일 업로드">
+                <AttachFileIcon />
+            </IconButton>
+
+            <IconButton
+                color="primary"
+                onClick={handleSendClick}
+                className="send-button"
                 disabled={!userId}
-                placeholder="Type a message..."
-                className="flex-grow bg-gray-700 p-3 rounded-l-xl text-white outline-none placeholder-gray-400 focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-            />
-            <button
-                onClick={handleButtonClick}
-                className="bg-blue-500 p-3 rounded-r-xl hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center"
-                disabled={!userId}
+                aria-label={editMessageId ? "메시지 저장" : "메시지 전송"}
             >
-                <FaPaperPlane className="text-white text-lg" />
-            </button>
-        </div>
+                <SendIcon />
+            </IconButton>
+        </Box>
     );
 };
 

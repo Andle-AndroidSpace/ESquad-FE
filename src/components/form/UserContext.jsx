@@ -15,8 +15,17 @@ export const UserProvider = ({ children }) => {
     });
 
     useEffect(() => {
+        // 로컬 스토리지에서 사용자 정보 불러오기
+        const savedUserInfo = localStorage.getItem("userInfo");
+        if (savedUserInfo) {
+            setUserInfo(JSON.parse(savedUserInfo));
+        }
+    }, []); // 컴포넌트가 마운트될 때 한 번만 실행
+
+    useEffect(() => {
         if (data) {
             setUserInfo(data.data); // 데이터가 있을 때만 사용자 정보 업데이트
+            localStorage.setItem("userInfo", JSON.stringify(data.data)); // 로컬 스토리지에 사용자 정보 저장
         }
         if (error) {
             console.error('사용자 정보를 불러오는 중 오류가 발생했습니다:', error);
@@ -26,6 +35,7 @@ export const UserProvider = ({ children }) => {
     const clearUserInfo = () => {
         setUserInfo(null); // 사용자 정보 초기화
         localStorage.removeItem('jwt'); // JWT 토큰 삭제
+        localStorage.removeItem('userInfo'); // 로컬 스토리지에서 사용자 정보 삭제
     };
 
     return (

@@ -1,3 +1,5 @@
+// 채팅 채널 관련 클래스
+// 커다란 하나의 스페이스 내에 다른 스페이스에 대한 정보, 그리고 개인채팅 채널 정보.
 import React from 'react';
 import { FaAngry, FaFrown, FaGrin, FaMeh, FaSmile } from 'react-icons/fa';
 
@@ -8,7 +10,6 @@ const chatChannelMock = [
     { id: 4, name: 'team4', icon: <FaAngry className="text-orange-500 text-xl" /> },
     { id: 5, name: 'team5', icon: <FaMeh className="text-gray-500 text-xl" /> },
 ];
-
 
 const ChatChannels = () => {
    return (

@@ -1,6 +1,6 @@
+// 메세지 통합 클래스 import 클래스
 import React from 'react';
 import ChatChannels from './ChatChannels';
-import ChatInput from './ChatInput';
 import ChatMessages from './ChatMessages';
 
 const ChatContent = () => {
