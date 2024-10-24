@@ -1,17 +1,18 @@
-// ChatFileApi.jsx
 import axios from "axios";
 
-export const fileUpload = async (file, username) => {
+// 파일 업로드 API 호출
+export const fileUpload = async (file, targetId, targetType) => {
     try {
         const token = localStorage.getItem('jwt');
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('username', username);
+        formData.append('targetId', targetId); // targetId 추가
+        formData.append('targetType', "CHAT"); // targetType 추가
 
-        const response = await axios.post(`http://localhost:8080/api/chat/file/upload`, formData, {
+        const response = await axios.post(`http://localhost:8080/api/files`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                Authorization: `Bearer ${token}`,
             },
         });
 
@@ -22,10 +23,11 @@ export const fileUpload = async (file, username) => {
     }
 };
 
+// 파일 삭제 API 호출
 export const fileDelete = async (filename) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.delete(`http://localhost:8080/api/chat/file/delete/${filename}`, {
+        const response = await axios.delete(`http://localhost:8080/api/files/${filename}`, {
             headers: {
                 Authorization: `Bearer ${token}`, // 인증 토큰 추가
             },
@@ -37,34 +39,31 @@ export const fileDelete = async (filename) => {
     }
 };
 
-export const fileDownload = async (filename) => {
+// 파일 다운로드 API 호출
+export const fileDownload =async (fileName) => {
+    const fileUrl = `http://localhost:8080/api/files/${fileName}`;
     try {
-        const token = localStorage.getItem('jwt');
-        const response = await axios.get(`http://localhost:8080/api/chat/file/download/${filename}`, {
-            responseType: 'blob',
+        const response = await fetch(fileUrl, {
+            method: 'GET',
             headers: {
-                Authorization: `Bearer ${token}`, // 인증 토큰 추가
+                'Content-Type': 'application/octet-stream',
             },
         });
 
-        const contentDisposition = response.headers['content-disposition'];
-        let fileName = 'downloaded_file';
-        if (contentDisposition) {
-            const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
-            if (fileNameMatch && fileNameMatch.length === 2) {
-                fileName = fileNameMatch[1];
-            }
+        if (!response.ok) {
+            throw new Error("파일 다운로드 실패");
         }
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', fileName);
+        link.setAttribute("download", fileName); // 다운로드할 파일 이름
         document.body.appendChild(link);
         link.click();
-        link.remove();
+        link.parentNode.removeChild(link);
         window.URL.revokeObjectURL(url);
     } catch (error) {
-        console.error("Error downloading file:", error.response ? error.response.data : error.message);
+        console.error("파일 다운로드 중 오류 발생:", error);
     }
 };

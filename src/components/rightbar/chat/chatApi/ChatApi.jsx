@@ -35,7 +35,7 @@ export const sendMessage = async (messageData) => {
 export const editChatMessage = async (roomId, messageId, editMessageData) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.put(`http://localhost:8080/api/chat/edit/${roomId}/${messageId}`, editMessageData, {
+        const response = await axios.put(`http://localhost:8080/api/chat/${roomId}/${messageId}`, editMessageData, {
             headers: {
                 Authorization: `Bearer ${token}`, // 인증 토큰 추가
             },
@@ -50,7 +50,7 @@ export const editChatMessage = async (roomId, messageId, editMessageData) => {
 export const deleteMessage = async (roomId, messageId, userId) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.delete(`http://localhost:8080/api/chat/delete/${roomId}/${messageId}`, {
+        const response = await axios.delete(`http://localhost:8080/api/chat/${roomId}/${messageId}`, {
             headers: {
                 Authorization: `Bearer ${token}`, // 인증 토큰 추가
             },

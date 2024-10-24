@@ -6,6 +6,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import FilePreview from './components/FilePreview';
+import {fileUpload} from "./chatApi/ChatFileApi.jsx";
 
 const ChatInput = ({
                        message,
@@ -17,13 +18,19 @@ const ChatInput = ({
                        handleSend,
                        handleRemoveFile,
                        selectedFile,
-                       handleSendMessage
+                       handleSendMessage,
+                       targetId
                    }) => {
-    const handleSendClick = () => {
+    const handleSendClick = async () => {
         if (selectedFile) {
             // 파일이 선택된 경우
-            handleSend(''); // 메시지 없이 파일만 전송
-            onMessageChange({ target: { value: '' } }); // 메시지 입력 필드를 비웁니다.
+            const uploadResponse = await fileUpload(selectedFile, targetId); // 파일 업로드 함수 호출
+            if (uploadResponse) {
+                handleSend(''); // 메시지 없이 파일만 전송
+                onMessageChange({ target: { value: '' } }); // 메시지 입력 필드를 비웁니다.
+            } else {
+                alert("파일 업로드 실패");
+            }
         } else if (message.trim()) {
             // 메시지가 있는 경우
             if (editMessageId) {
