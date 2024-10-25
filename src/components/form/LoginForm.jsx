@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import { useUser } from "/src/components/form/UserContext.jsx";
+import { useUser } from "/src/components/form/Inquiry.jsx";
 import useAxios from "/src/hooks/useAxios.jsx";
 
 const LoginForm = ({ setIsLoggedIn }) => {
@@ -9,14 +9,13 @@ const LoginForm = ({ setIsLoggedIn }) => {
    const [password, setPassword] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
    const navigate = useNavigate();
-   const { refetch: fetchUserInfo } = useUser(); // fetchUserInfo 호출
+   const { refetch: fetchUserInfo } = useUser();
 
-   // useAxios 커스텀 훅을 사용하여 POST 요청 설정
+
    const { data, error, loading, refetch: loginRequest } = useAxios({
       url: 'http://localhost:8080/api/users/login',
       method: 'POST',
-      body: { username, password }, // 요청 본문에 아이디와 비밀번호 전송
-      skip: true, // 요청을 처음부터 바로 실행하지 않음 (명시적으로 요청할 때만 실행)
+      body: { username, password },
    });
 
    useEffect(() => {
@@ -24,8 +23,8 @@ const LoginForm = ({ setIsLoggedIn }) => {
          const { accessToken } = data.data;
          localStorage.setItem('jwt', accessToken);
          setIsLoggedIn(true);
-         fetchUserInfo(); // 사용자 정보 다시 불러오기
-         navigate('/'); // 홈으로 이동
+         fetchUserInfo();
+         navigate('/');
       }
    }, [data, fetchUserInfo, navigate, setIsLoggedIn]);
 
@@ -37,11 +36,10 @@ const LoginForm = ({ setIsLoggedIn }) => {
    }, [error]);
 
    const handleSubmit = async (e) => {
-      e.preventDefault();  // 기본 동작 방지
+      e.preventDefault();
       try {
-         await loginRequest({ body: { username, password } }); // loginRequest 호출 시 동적으로 username과 password 전달
+         await loginRequest({ body: { username, password } });
       } catch (error) {
-         // 이미 useAxios에서 error를 처리하므로 추가 로직 필요 없음
       }
    };
 
@@ -92,8 +90,13 @@ const LoginForm = ({ setIsLoggedIn }) => {
                 </div>
              </div>
              <div className='mt-8 flex flex-row items-center justify-center'>
-                <button type="button" className='font-semibold text-base text-violet-500 mx-3'>아이디를 잊어버렸나요?</button>
-                <button type="button" className='font-semibold text-base text-violet-500 mx-3'>패스워드를 잊어버렸나요?</button>
+                <Link to="/find-username">
+                   <button type="button" className='font-semibold text-base text-violet-500 mx-3'>아이디를 잊어버렸나요?</button>
+                </Link>
+
+                <Link to="/find-password">
+                   <button type="button" className='font-semibold text-base text-violet-500 mx-3'>패스워드를 잊어버렸나요?</button>
+                </Link>
              </div>
              <div className='mt-8 flex flex-col gap-y-4'>
                 <button type="submit" className='active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-violet-500 text-white text-lg font-bold'>

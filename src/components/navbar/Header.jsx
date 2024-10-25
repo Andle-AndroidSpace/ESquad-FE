@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaBell, FaInbox, FaSearch } from 'react-icons/fa';
 import { IoPersonCircleOutline } from "react-icons/io5";
+import {Link} from "react-router-dom";
 
 const Header = () => {
     return (
@@ -28,10 +29,12 @@ const Header = () => {
                     <FaInbox className="text-xl" />
                     <span className="w-4 h-4 bg-red-400 absolute text-xs rounded-xl flex items-center justify-center -top-0.5 -right-0.5">3</span>
                 </button>
-                <button className="p-2 relative hover:bg-gray-700 rounded-full cursor-pointer">
-                    <IoPersonCircleOutline className="text-xl" />
-                    <span className="w-4 h-4 bg-red-400 absolute text-xs rounded-xl flex items-center justify-center -top-0.5 -right-0.5">1</span>
-                </button>
+                <Link to="/user/profile">
+                    <button className="p-2 relative hover:bg-gray-700 rounded-full cursor-pointer">
+                        <IoPersonCircleOutline className="text-xl" />
+                        <span className="w-4 h-4 bg-red-400 absolute text-xs rounded-xl flex items-center justify-center -top-0.5 -right-0.5">1</span>
+                    </button>
+                </Link>
             </div>
         </header>
     );
