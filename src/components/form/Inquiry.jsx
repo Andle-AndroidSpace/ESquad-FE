@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import useAxios from '/src/hooks/useAxios.jsx'; // 커스텀 훅 사용
+import useAxios from '/src/hooks/useAxios.jsx';
 
-const UserContext = createContext();
+const Inquiry = createContext();
 
-export const useUser = () => useContext(UserContext);
+export const useUser = () => useContext(Inquiry);
 
 export const UserProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(null);
@@ -29,8 +29,8 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ userInfo, refetch, clearUserInfo }}>
+        <Inquiry.Provider value={{ userInfo, refetch, clearUserInfo }}>
             {children}
-        </UserContext.Provider>
+        </Inquiry.Provider>
     );
 };
