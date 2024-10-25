@@ -74,7 +74,7 @@ const JoinForm = () => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
     if (id === 'username') {
-      setIsUsernameChecked(false); // 아이디가 변경되면 중복 확인 상태 초기화
+      setIsUsernameChecked(false);
     } else if (id === 'nickname') {
       setIsNicknameChecked(false);
     }
@@ -115,7 +115,6 @@ const JoinForm = () => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, username: value }));
 
-    // 아이디 유효성 검사
     const usernameRegex = /^[a-zA-Z0-9]{6,12}$/;
     if (!usernameRegex.test(value)) {
       setUsernameError('아이디는 영어와 숫자로 구성된 6~12자여야 합니다.');
@@ -128,7 +127,6 @@ const JoinForm = () => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, nickname: value }));
 
-    // 닉네임 유효성 검사
     if (value.length < 2 || value.length > 16) {
       setNicknameError('닉네임은 2~16자 사이여야 합니다.');
     } else {
@@ -144,7 +142,7 @@ const JoinForm = () => {
 
     try {
       const response = await axios.get('/api/users/usernamecheck', {
-        params: { username: formData.username }, // 쿼리 파라미터로 전달
+        params: { username: formData.username },
       });
       if (response.data.available) {
         alert('사용 가능한 아이디입니다.');
@@ -166,7 +164,7 @@ const JoinForm = () => {
 
     try {
       const response = await axios.get('/api/users/usernicknamecheck', {
-        params: { nickname: formData.nickname }, // 쿼리 파라미터로 전달
+        params: { nickname: formData.nickname },
       });
       if (response.data.available) {
         alert('사용 가능한 닉네임입니다.');
@@ -234,7 +232,7 @@ const JoinForm = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      return; // 유효성 검사를 통과하지 못하면 폼 제출을 중단
+      return;
     }
 
     try {
@@ -261,7 +259,6 @@ const JoinForm = () => {
            style={{ maxHeight: '100vh' }}>
         <h2 className='text-3xl font-semibold mb-6'>회원가입</h2>
         <form className='flex flex-col gap-y-4' onSubmit={handleSubmit}>
-          {/* 아이디 입력 필드 및 중복 확인 버튼 */}
           <div className='flex flex-wrap gap-x-4 gap-y-4'>
             <div className='flex-1 min-w-[180px]'>
               <label htmlFor='username' className='text-base font-semibold block text-left'>
@@ -466,8 +463,6 @@ const JoinForm = () => {
             </button>
           </div>
         </form>
-
-        {/* {submitMessage && <div className='mt-4 text-center text-lg font-semibold'>{submitMessage}</div>} */}
 
         <div className='mt-8 flex justify-center items-center'>
           <p className='font-semibold text-base'>이미 계정이 있으신가요?</p>
