@@ -6,8 +6,9 @@ import Search from "./search/Search";
 import StudyPage from "./study/StudyPage";
 import UserUpdate from "./user/UserUpdate";
 import Profile from "./user/Profile.jsx"
-import GetUser from "./user/GetUser.jsx";
+import GetUser from "./user/UserInquiry.jsx";
 import UserPasswordUpdate from "./user/UserPasswordUpdate.jsx";
+import UserInquiry from "./user/UserInquiry.jsx";
 
 
 
@@ -21,8 +22,8 @@ const Center = () => {
             <Route path="/pages/studypages" element={<Study />} />
             <Route path='/pages/studypages/:no' element={<StudyPage />} />
             <Route path="/user/update" element={<UserUpdate />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/user/get" element={<GetUser />} />
+            <Route path="/user/profile" element={<Profile />} />
+            <Route path="/user/inquiry" element={<UserInquiry />} />
             <Route path="/user/password" element={<UserPasswordUpdate />} />
         </Routes>
     );

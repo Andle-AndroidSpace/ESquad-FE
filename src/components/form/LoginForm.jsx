@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import { useUser } from "/src/components/form/UserContext.jsx";
+import { useUser } from "/src/components/form/Inquiry.jsx";
 import useAxios from "/src/hooks/useAxios.jsx";
 
 const LoginForm = ({ setIsLoggedIn }) => {
@@ -90,8 +90,13 @@ const LoginForm = ({ setIsLoggedIn }) => {
                 </div>
              </div>
              <div className='mt-8 flex flex-row items-center justify-center'>
-                <button type="button" className='font-semibold text-base text-violet-500 mx-3'>아이디를 잊어버렸나요?</button>
-                <button type="button" className='font-semibold text-base text-violet-500 mx-3'>패스워드를 잊어버렸나요?</button>
+                <Link to="/find-username">
+                   <button type="button" className='font-semibold text-base text-violet-500 mx-3'>아이디를 잊어버렸나요?</button>
+                </Link>
+
+                <Link to="/find-password">
+                   <button type="button" className='font-semibold text-base text-violet-500 mx-3'>패스워드를 잊어버렸나요?</button>
+                </Link>
              </div>
              <div className='mt-8 flex flex-col gap-y-4'>
                 <button type="submit" className='active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-violet-500 text-white text-lg font-bold'>

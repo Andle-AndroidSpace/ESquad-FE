@@ -3,12 +3,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Home from "./pages/home/Home";
 import Join from "./pages/join/Join";
 import Login from "./pages/login/Login";
-import { UserProvider } from '/src/components/form/UserContext.jsx'
+import FindUsername from "./components/form/FindUsername.jsx"
+import FindPassword from "./components/form/FindPassword.jsx"
+import { UserProvider } from '/src/components/form/Inquiry.jsx'
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // 페이지가 로드되었을 때 로컬 스토리지에서 토큰을 확인하여 로그인 상태 설정
     useEffect(() => {
         const token = localStorage.getItem('jwt');
         if (token) {
@@ -38,11 +39,10 @@ const App = () => {
         <UserProvider>
             <BrowserRouter>
                 <Routes>
-                    {/* Redirect logged-in users away from the login page */}
                     <Route path="/login" element={<RedirectIfLoggedIn><Login setIsLoggedIn={setIsLoggedIn} /></RedirectIfLoggedIn>} />
                     <Route path="/join" element={<Join />} />
-
-                    {/* Protect routes that require authentication */}
+                    <Route path="/find-username" element={<FindUsername />} />
+                    <Route path="/find-password" element={<FindPassword />} />
                     <Route path="*" element={<ProtectedRoute><Home /></ProtectedRoute>} /></Routes>
             </BrowserRouter>
         </UserProvider>
