@@ -2,26 +2,43 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from "prop-types";
+import StudyPageUpdate from "./StudyPageUpdate.jsx";
+import StudyPageDelete from "./StudyPageDelete.jsx";
 
-const StudyPageInfo = ({title, author, publishedDate, description, image}) => {
-  const {no} = useParams(); // URL 파라미터에서 no를 가져옴
+const StudyPageInfo = () => {
+  const {studyId} = useParams(); // URL 파라미터에서 studyId를 가져옴
+
+  const userId = 1; // 임의의 userId
+  const teamId = 100;
+
+  const [expanded, setExpanded] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [study, setStudy] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userId = 1; // 임의의 userId
+
+
+  const fetchFiles = async () => {
+    try {
+      const response = await axios.get(`/api/files/BOOK_PAGE/${studyId}`);
+      setUploadedFiles(response.data);
+    } catch (error) {
+      console.error('Failed to fetch files:', error);
+    }
+  };
+  const fetchStudyPage= async () => {
+    try {
+      const response = await axios.get(`/api/${teamId}/study-pages/${studyId}`);
+      setStudy(response.data);
+    } catch (error) {
+      console.error('Failed to fetch page:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await axios.get(`/api/files/BOOK_PAGE/${no}`);
-        setUploadedFiles(response.data);
-      } catch (error) {
-        console.error('Failed to fetch files:', error);
-      }
-    };
-
-    fetchFiles().then();
-  }, [no]);
+    fetchFiles();
+    fetchStudyPage();
+  }, [studyId]);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -34,7 +51,7 @@ const StudyPageInfo = ({title, author, publishedDate, description, image}) => {
 
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('targetId', no);
+    formData.append('targetId', studyId);
     formData.append('targetType', 'BOOK_PAGE');
 
     try {
@@ -52,6 +69,10 @@ const StudyPageInfo = ({title, author, publishedDate, description, image}) => {
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const toggleExpand = () => {
+    setExpanded(!expanded);
   };
 
   const handleFileDelete = async (storedFileName) => {
@@ -93,12 +114,9 @@ const StudyPageInfo = ({title, author, publishedDate, description, image}) => {
       <div
           className="p-4 bg-gray-900 text-white min-h-screen flex justify-center">
         <div className="w-full max-w-4xl bg-gray-800 rounded-lg shadow-lg">
-          <img src={image} alt={title} className="w-full h-72 object-cover"/>
           <div className="p-6">
-            <h2 className="text-3xl font-bold mb-2">{title}</h2>
-            <p className="text-sm text-gray-400 mb-2">by {author}</p>
-            <p className="text-sm text-gray-500 mb-4">Published: {publishedDate}</p>
-            <p className="text-base text-gray-200 mb-6 leading-relaxed">{description}</p>
+            <h2 className="text-3xl font-bold mb-2">{study.title}</h2>
+            <p className="text-base text-gray-200 mb-6 leading-relaxed">{study.description}</p>
           </div>
 
           <div className="p-6 bg-gradient-to-r from-gray-700 to-gray-600">
@@ -150,6 +168,22 @@ const StudyPageInfo = ({title, author, publishedDate, description, image}) => {
             >
               {isUploading ? '업로드 중...' : '등록'}
             </button>
+          </div>
+          <div>
+            <button
+                onClick={toggleExpand}
+                className="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300"
+            >
+              +
+            </button>
+            <div
+                className={`flex flex-col items-center transition-all duration-300 ease-in-out ${
+                    expanded ? 'mt-4 opacity-100' : 'mt-0 opacity-0 pointer-events-none'
+                }`}
+            >
+              <StudyPageUpdate studyId={studyId} teamId={teamId} />
+              <StudyPageDelete studyId={studyId} teamId={teamId} studyname={study.title}/>
+            </div>
           </div>
         </div>
       </div>

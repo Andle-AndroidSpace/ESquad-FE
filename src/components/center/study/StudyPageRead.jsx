@@ -26,7 +26,7 @@ function openLiveStreamWindow(studyId) {
 }
 
 // eslint-disable-next-line react/prop-types
-const StudyRead = () => {
+const StudyPageRead = () => {
     const [studies, setStudies] = useState([]); // 스터디 페이지 저장용
     const [searchQuery, setSearchQuery] = useState(''); // 스터디 페이지 검색용
     const [currentPage, setCurrentPage] = useState(1); // 스터디 페이지 목록 페이지 관리
@@ -47,7 +47,7 @@ const StudyRead = () => {
             const fetchStudies = async () => {
                 try {
                     setLoading(true);
-                    const response = await axios.get(`http://localhost:8080/api/${numericTeamId}/study-pages`);
+                    const response = await axios.get(`/api/${numericTeamId}/study-pages`);
                     console.log(response); // 성공적인 응답 처리
                     setStudies(response.data);
                     console.log(studies[0]);
@@ -69,7 +69,7 @@ const StudyRead = () => {
 
     // 스터디 페이지를 제목으로 검색
     const filteredStudies = studies.filter(study =>
-        study.title.toLowerCase().includes(searchQuery.toLowerCase())
+        (study.title?.toLowerCase().includes(searchQuery.toLowerCase())) || false
     );
 
     return (
@@ -94,7 +94,12 @@ const StudyRead = () => {
                 <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
                     {filteredStudies.map((study) => (
                         <li key={study.id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                            <Link to={`/${teamId}/study-pages/${study.id}`} study={study} className="block">
+                            <Link
+                                to={{
+                                    pathname: `/${teamId}/study-pages/${study.id}`,
+                                    state: { study }}
+                                }
+                                className="block">
                                 <img src={study.image?study.image: 'src/img/studypagedefaultimg.jpeg'} alt={study.title?study.title:notitle} className="w-full h-32 object-cover" />
                                 <div className="p-4">
                                     <h3 className="text-lg font-semibold mb-2"> {study.title?study.title:notitle} </h3>
@@ -141,4 +146,4 @@ const StudyRead = () => {
     );
 };
 
-export default StudyRead;
+export default StudyPageRead;
