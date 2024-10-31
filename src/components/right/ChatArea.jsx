@@ -4,9 +4,10 @@ import { alpha, useTheme } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
-const ChatArea = ({ isSmallScreen, isMediumScreen, teams }) => {
+const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
     const theme = useTheme();
     const [currentChatRoom, setCurrentChatRoom] = useState(teams[0]);
+    console.log(user);
 
     // Chat Room Selection Handler
     const handleChatRoomSelect = (room) => {
