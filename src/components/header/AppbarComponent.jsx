@@ -27,6 +27,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Link, NavLink, useNavigate} from "react-router-dom";
 import {useUser} from "../form/UserContext.jsx";
+import StudyCreatgionDialog from "../team/StudyCreationDialog.jsx";
+import TeamCreationDialog from "../team/TeamCreationDialog.jsx";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -84,34 +86,15 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
     const isVerySmallScreen = useMediaQuery('(max-width: 30vw)');
 
     const teamTabOpen = Boolean(teamAnchorEl);
+    const [isTeamCreationModalOpen, setIsTeamCreationModalOpen] = useState(false);
 
-    // Handle team menu open
-    const handleTeamMenuClick = (event) => {
-        setTeamAnchorEl(event.currentTarget);
-    };
-
-    // Handle team menu close
-    const handleTeamMenuClose = () => {
-        setTeamAnchorEl(null);
-    };
+    // Handle team menu open/close
+    const handleTeamMenuClick = (event) => { setTeamAnchorEl(event.currentTarget); };
+    const handleTeamMenuClose = () => { setTeamAnchorEl(null); };
 
     // Handle notifications menu open/close
-    const handleNotificationsClick = (event) => {
-        setNotificationsAnchorEl(event.currentTarget);
-    };
-
-    const handleNotificationsClose = () => {
-        setNotificationsAnchorEl(null);
-    };
-
-    // Handle account menu open/close
-    const handleAccountClick = (event) => {
-        setAccountAnchorEl(event.currentTarget);
-    };
-
-    const handleAccountClose = () => {
-        setAccountAnchorEl(null);
-    };
+    const handleNotificationsClick = (event) => { setNotificationsAnchorEl(event.currentTarget); };
+    const handleNotificationsClose = () => { setNotificationsAnchorEl(null); };
 
     // Handle deleting a single notification
     const handleDeleteNotification = (id) => {
@@ -119,14 +102,18 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
     };
 
     // Handle deleting all notifications
-    const handleDeleteAllNotifications = () => {
-        setNotifications([]);
-    };
+    const handleDeleteAllNotifications = () => { setNotifications([]); };
+
+    // Handle account menu open/close
+    const handleAccountClick = (event) => { setAccountAnchorEl(event.currentTarget); };
+    const handleAccountClose = () => { setAccountAnchorEl(null); };
 
     // 사용자의 팀탭에서 팀 선택
-    const handleTeam = (i) => {
-        updateTeam(i);
-    };
+    const handleTeam = (i) => { updateTeam(i); };
+
+    // Handle create team dialog open/close
+    const handleCreateTeamButtonClick = () => { setIsTeamCreationModalOpen(true); };
+    const handleCloseCreateTeamModal = () => { setIsTeamCreationModalOpen(false); };
 
     return (
         <AppBar position="fixed" color="inherit" elevation={1} sx={{ width: `100%`, backgroundColor: '#fff' }}>
@@ -202,7 +189,6 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 anchorEl={teamAnchorEl}
                                 open={teamTabOpen}
                                 onClose={handleTeamMenuClose}
-                                onClick={handleTeamMenuClose}
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                                 transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 MenuListProps={{
@@ -213,9 +199,15 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 }}
                             >
                                 <List>
-                                    <ListItem button onClick={handleTeamMenuClose} sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}>
+                                    <ListItem button onClick={handleCreateTeamButtonClick} sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}>
                                         <ListItemText primary="새로운 팀 생성" />
                                     </ListItem>
+
+                                    {/* Team Creation Modal */}
+                                    <TeamCreationDialog
+                                        open={isTeamCreationModalOpen}
+                                        onClose={handleCloseCreateTeamModal}
+                                    />
 
                                     {teams == null ? (
                                         <ListItem>
