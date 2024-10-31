@@ -23,7 +23,7 @@ const Home = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedSidebarItem, setSelectedSidebarItem] = useState(null);
-    const user = useUser();
+    // const user = useUser();
 
     // 팀스페이스 불러와야 함 -> 채팅이랑 팀 헤더에 쏴줘야 함 (지금은 더미)
     const [teams, setTeams] = useState([
@@ -137,20 +137,6 @@ const Home = () => {
                         }}
                     >
 
-                        {/*{selectedTab === 0 && (*/}
-                        {/*    <PostListPage*/}
-                        {/*        isSmallScreen={isSmallScreen}*/}
-                        {/*        isMediumScreen={isMediumScreen}*/}
-                        {/*        selectedTab={selectedTab}*/}
-                        {/*    />*/}
-                        {/*)}*/}
-                        {/*{selectedTab === 1 && (*/}
-                        {/*    <StudyPage*/}
-                        {/*        isSmallScreen={isSmallScreen}*/}
-                        {/*        isMediumScreen={isMediumScreen}*/}
-                        {/*        selectedTab={selectedTab}*/}
-                        {/*    />*/}
-                        {/*)}*/}
                         <Outlet />
                     </Box>
 
