@@ -26,7 +26,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Link, NavLink, useNavigate} from "react-router-dom";
-
+import {useUser} from "../form/UserContext.jsx";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -39,8 +39,6 @@ const Search = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(3),
     border: '1px solid #FFD700', // Gold border for the search bar
 }));
-
-
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -65,6 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam }) => {
     const navigate = useNavigate();
+    const user = useUser();
 
     const handleLogout = () => {
         localStorage.removeItem('jwt');
@@ -217,21 +216,29 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     <ListItem button onClick={handleTeamMenuClose} sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}>
                                         <ListItemText primary="새로운 팀 생성" />
                                     </ListItem>
-                                    {teams.map((team, index) => (
-                                        <Link to={`/teams/${team.id}`} className={`menu-team${index}`} key={index}>
-                                            <ListItem
-                                                button
-                                                key={index}
-                                                onClick={() => handleTeam(index)}
-                                                sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}
-                                            >
-                                                <ListItemIcon>
-                                                    <Avatar alt="Team Avatar" src='/src/assets/user-avatar.png' />
-                                                </ListItemIcon>
-                                                <ListItemText primary={team.teamName} />
-                                            </ListItem>
-                                        </Link>
-                                    ))}
+
+                                    {teams == null ? (
+                                        <ListItem>
+                                            <ListItemText primary="팀이 없습니다." />
+                                        </ListItem>
+                                    ) : (
+                                        <>
+                                            {teams.map((team, index) => (
+                                                <Link to={`/teams/${team.id}`} className={`menu-team${index}`} key={index}>
+                                                    <ListItem
+                                                        button
+                                                        onClick={() => handleTeam(index)}
+                                                        sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <Avatar alt="Team Avatar" src='/src/assets/user-avatar.png' />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={team?.teamName} />
+                                                    </ListItem>
+                                                </Link>
+                                            ))}
+                                        </>
+                                    )}
                                 </List>
                             </Menu>
                         </Box>
@@ -282,7 +289,7 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     }}
                                 >
                                     <Avatar alt="User Avatar" src="/src/assets/user-avatar.png" />
-                                    <Typography variant="body1">유저 이름</Typography>
+                                    <Typography variant="body1">유저명</Typography>
                                 </IconButton>
                             </Box>
                             <Menu
