@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import {
     Box,
     Typography,
-    Dialog,
-    DialogContent,
-    Card,
-    CardContent,
-    CardActions,
-    Grid,
     Accordion,
     AccordionSummary,
     AccordionDetails,
@@ -16,25 +10,24 @@ import {
     ListItemIcon,
     ListItemText,
     IconButton,
-    Avatar,
     Divider,
-    Fab, TextField, Button,
+    Button,
 } from '@mui/material';
-import { alpha, useTheme } from '@mui/material';
 import {useLocation, useParams} from "react-router-dom";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import AddIcon from '@mui/icons-material/Add';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import bookProfileManAndSea from '../../assets/book-profile-man-and-sea.jpg';
 
+
 const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
-    const theme = useTheme();
     const location = useLocation();
     const study = location.state.study;
     const params = useParams();
     const [isStudyDeleteModalOpen, setIsStudyDeleteModalOpen] = useState(false);
     const [attachments, setAttachments] = useState(study.attachments || []);
+    const [selectedFile, setSelectedFile] = useState();
 
     const handleDeleteButtonClick = () => {
         setIsStudyDeleteModalOpen(true);
@@ -46,10 +39,19 @@ const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
 
     const handleAddAttachment = (event) => {
         const file = event.target.files[0];
-        if (file) {
-            setAttachments([...attachments, { name: file.name }]);
+        setSelectedFile(file);
+    };
+
+    const handleUploadAttachment = () => {
+        if (selectedFile) {
+            const newAttachment = {
+                name: selectedFile.name,
+                id: selectedFile.name + Date.now(), // Generate unique ID for the file
+            };
+            setAttachments([...attachments, newAttachment]);
+            setSelectedFile(null);
         }
-    }
+    };
 
     const handleDeleteAttachment = (index) => {
         const updatedAttachments = attachments.filter((_, i) => i !== index);
@@ -110,12 +112,13 @@ const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
                 </AccordionSummary>
                 <AccordionDetails>
 
-                    <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
+                    <Box sx={{ mb: 2, display: 'flex', gap: 2, alignItems: 'center' }}>
+                        {/* File Upload Input */}
                         <Button
                             variant="contained"
                             component="label"
                             color="primary"
-                            onClick={handleAddAttachment}
+                            startIcon={<UploadFileIcon />}
                         >
                             파일 추가
                             <input
@@ -124,7 +127,33 @@ const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
                                 onChange={handleAddAttachment}
                             />
                         </Button>
+
+
                     </Box>
+
+                    {/* Selected Files Preview */}
+                    {selectedFile &&  (
+                        <Box sx={{ mb: 2, display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Typography variant="body2" color="textSecondary">
+                                선택한 파일:
+                            </Typography>
+                            <ListItem>
+                                <ListItemIcon>
+                                    <AttachFileIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={selectedFile.name} />
+                            </ListItem>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={handleUploadAttachment}
+                            >
+                                업로드
+                            </Button>
+                        </Box>
+                    )}
+
+                    {/* Attachments List */}
                     <List>
                         {attachments && attachments.length > 0 ? (
                             attachments.map((attachment, index) => (

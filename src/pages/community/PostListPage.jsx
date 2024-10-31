@@ -57,21 +57,21 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                         justifyContent: 'flex-start',
                     }}
                 >
-                    <Button variant="text" sx={{ fontSize: 'medium', fontWeight: 'bold', borderBottom: '2px solid', borderColor: theme.palette.primary.main }}>전체</Button>
-                    <Button variant="text" sx={{ fontSize: 'medium' }}>미해결</Button>
-                    <Button variant="text" sx={{ fontSize: 'medium' }}>해결됨</Button>
+                    {/*<Button variant="text" sx={{ fontSize: 'medium', fontWeight: 'bold', borderBottom: '2px solid', borderColor: theme.palette.primary.main }}>전체</Button>*/}
+                    {/*<Button variant="text" sx={{ fontSize: 'medium' }}>미해결</Button>*/}
+                    {/*<Button variant="text" sx={{ fontSize: 'medium' }}>해결됨</Button>*/}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, width: '90%' }}>
-                    <InputBase
-                        placeholder="궁금한 질문을 검색해보세요!"
-                        sx={{
-                            width: '100%',
-                            p: 1,
-                            border: '1px solid #ccc',
-                            borderRadius: 1,
-                        }}
-                    />
-                    <Button variant="contained" sx={{ fontSize: 'medium', backgroundColor: theme.palette.primary.main }}>검색</Button>
+                    {/*<InputBase*/}
+                    {/*    placeholder="궁금한 질문을 검색해보세요!"*/}
+                    {/*    sx={{*/}
+                    {/*        width: '100%',*/}
+                    {/*        p: 1,*/}
+                    {/*        border: '1px solid #ccc',*/}
+                    {/*        borderRadius: 1,*/}
+                    {/*    }}*/}
+                    {/*/>*/}
+                    {/*<Button variant="contained" sx={{ fontSize: 'medium', backgroundColor: theme.palette.primary.main }}>검색</Button>*/}
                 </Box>
             </Box>
 
@@ -87,10 +87,10 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                 }}
             >
                 <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    <Button variant="text" sx={{color: theme.palette.text.secondary}}>최신순</Button>
-                    <Button variant="text" sx={{color: theme.palette.text.secondary}}>정확도순</Button>
-                    <Button variant="text" sx={{color: theme.palette.text.secondary}}>답변많은순</Button>
-                    <Button variant="text" sx={{color: theme.palette.text.secondary}}>좋아요순</Button>
+                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>최신순</Button>*/}
+                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>정확도순</Button>*/}
+                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>답변많은순</Button>*/}
+                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>좋아요순</Button>*/}
                 </Box>
                 <Button
                     variant="contained"
@@ -131,7 +131,7 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                         }}
                     >
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexDirection: isSmallScreen ? 'column' : 'row' }}>
-                            <Button variant="outlined" size="small" disabled>미해결</Button>
+                            {/*<Button variant="outlined" size="small" disabled>미해결</Button>*/}
                             <Typography variant="body1" fontWeight="bold">[해결] 제목 예시 - 질문 내용이 간단히 들어가는 영역입니다.</Typography>
                         </Box>
                         <Typography variant="body2" sx={{ color: theme.palette.grey[700], mb: 1 }}>질문 설명이 여기에 표시됩니다. 질문의 간단한 설명이나 내용을 보여주는 부분입니다.</Typography>
@@ -146,7 +146,7 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                             <Typography variant="caption" color="text.secondary">작성자 이름 · 17분 전 · 카테고리명</Typography>
                             <Box sx={{ display: 'flex', gap: 2, mt: isSmallScreen ? 1 : 0 }}>
                                 <Typography variant="caption">👍 0</Typography>
-                                <Typography variant="caption">👁 3</Typography>
+                                <Typography variant="caption">👁  3</Typography>
                                 <Typography variant="caption">💬 0</Typography>
                             </Box>
                         </Box>
