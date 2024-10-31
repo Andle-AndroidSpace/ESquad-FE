@@ -15,6 +15,7 @@ import SidebarComponent from "../../components/header/SidebarComponent.jsx";
 import PostListPage from "../community/PostListPage.jsx";
 import ChatArea from "../../components/right/ChatArea.jsx";
 import StudyPage from "../team/StudyPage.jsx";
+import {useUser} from "../../components/form/UserContext.jsx";
 
 const Home = () => {
     const theme = useTheme();
@@ -22,6 +23,7 @@ const Home = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedSidebarItem, setSelectedSidebarItem] = useState(null);
+    const user = useUser();
 
     // 팀스페이스 불러와야 함 -> 채팅이랑 팀 헤더에 쏴줘야 함 (지금은 더미)
     const [teams, setTeams] = useState([
@@ -158,6 +160,7 @@ const Home = () => {
                         isMediumScreen={isMediumScreen}
                         teams={teams}
                         selectedTeam={selectedTeam}
+                        user={user}
                     />
                 </Box>
             </Box>
