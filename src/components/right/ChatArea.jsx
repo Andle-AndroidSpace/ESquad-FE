@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, IconButton, Avatar, InputBase } from '@mui/material';
 import { alpha, useTheme } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import ChatMessages from './ChatMessages'; // ChatMessages 컴포넌트 임포트
 
-
-const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
+const ChatArea = ({ isSmallScreen, isMediumScreen, teams }) => {
     const theme = useTheme();
     const [currentChatRoom, setCurrentChatRoom] = useState(teams[0]);
-    console.log(user);
 
     // Chat Room Selection Handler
     const handleChatRoomSelect = (room) => {
@@ -17,7 +16,6 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
     return (
         <Box
             sx={{
-                // border: '1px solid',    // Chat area
                 flex: isMediumScreen ? 4 : 3,
                 gap: 1,
                 p: 2,
@@ -57,8 +55,8 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
                                 },
                                 border: '1px solid',
                                 borderColor: currentChatRoom?.id === team.id ? '#D1C4E9' : theme.palette.primary.main,
-                                minWidth: isSmallScreen ? '80px' : '120px', // Adjust button width based on screen size
-                                fontSize: isSmallScreen ? '0.75rem' : '1rem', // Adjust font size based on screen size
+                                minWidth: isSmallScreen ? '80px' : '120px',
+                                fontSize: isSmallScreen ? '0.75rem' : '1rem',
                                 mb: 1,
                             }}
                         >
@@ -109,8 +107,8 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
                                     },
                                     border: '1px solid',
                                     borderColor: currentChatRoom?.id === team.id ? '#D1C4E9' : theme.palette.primary.main,
-                                    minWidth: isSmallScreen ? '80px' : '120px', // Adjust button width based on screen size
-                                    fontSize: isSmallScreen ? '0.75rem' : '1rem', // Adjust font size based on screen size
+                                    minWidth: isSmallScreen ? '80px' : '120px',
+                                    fontSize: isSmallScreen ? '0.75rem' : '1rem',
                                     mb: 1,
                                 }}
                             >
@@ -129,105 +127,7 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
                             overflowY: 'hidden',
                         }}
                     >
-                        {/* Chat Messages */}
-                        {/*<Typography variant="body1" sx={{ color: theme.palette.primary.main, mb: 1,}}>Entered: {currentChatRoom}</Typography>*/}
-                        {currentChatRoom && (
-                            <Box
-                                sx={{
-                                    border: '1px solid',
-                                    flexGrow: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column-reverse',
-                                    backgroundColor: '#fff',
-                                    p: 2,
-                                    borderRadius: 3,
-                                    overflowY: 'auto',
-                                }}
-                            >
-                                {[...Array(6)].map((_, index) => (
-                                    <Box
-                                        key={index}
-                                        sx={{
-                                            p: 1,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: 1,
-                                        }}
-                                    >
-                                        <Avatar alt="User Avatar" src="/src/assets/user-avatar.png" />
-                                        <Box>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    fontWeight: 'bold',
-                                                    mb: 1
-                                                }}
-                                            >
-                                                유저 이름
-                                            </Typography>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    border: `1px solid ${theme.palette.primary.main}`,
-                                                    padding: '8px',
-                                                    borderRadius: '10px',
-                                                    backgroundColor: '#fff',
-                                                    wordBreak: 'break-word'
-                                                }}
-                                            >
-                                                Chat message example {index + 1}
-                                            </Typography>
-                                            <Typography
-                                                variant="caption"
-                                                sx={{ color: 'gray' }}
-                                            >
-                                                몇 시 몇 분
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                ))}
-                            </Box>
-                        )}
-
-                        {/* Chat Input */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                mt: 2,
-                            }}
-                        >
-                            <IconButton>
-                                <AttachFileIcon />
-                            </IconButton>
-                            <InputBase
-                                placeholder="Type a message..."
-                                sx={{
-                                    flexGrow: 1,
-                                    p: 1,
-                                    border: '1px solid #ccc',
-                                    borderRadius: 1,
-                                    backgroundColor: '#fff',
-                                }}
-                            />
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    height: '100%',
-                                    borderRadius: '20px',
-                                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-                                    textTransform: 'none',
-                                    fontWeight: 'bold',
-                                    '&:hover': {
-                                        backgroundColor: alpha(theme.palette.secondary.main, 0.8),
-                                    },
-                                    px: 3,
-                                }}
-                            >
-                                Send
-                            </Button>
-                        </Box>
+                        <ChatMessages currentChatRoom={currentChatRoom} /> {/* ChatMessages 컴포넌트 호출 */}
                     </Box>
                 </Box>
             )}
@@ -245,105 +145,8 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
                         overflowY: 'auto',
                     }}
                 >
-                    {/* Chat Messages */}
-                    <Typography variant="body1" sx={{ color: theme.palette.primary.main, mb: 2 }}>Entered: {currentChatRoom.teamName} </Typography>
-                    {currentChatRoom && (
-                        <Box
-                            sx={{
-                                flexGrow: 1,
-                                display: 'flex',
-                                flexDirection: 'column-reverse',
-                                // gap: 1,    // 챗 간격
-                                backgroundColor: '#fff',
-                                p: 2,
-                                borderRadius: 3,
-                                overflowY: 'auto',
-                            }}
-                        >
-                            {[...Array(6)].map((_, index) => (
-                                <Box
-                                    key={index}
-                                    sx={{
-                                        p: 1,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 1,
-                                    }}
-                                >
-                                    <Avatar alt="User Avatar" src="/src/assets/user-avatar.png" />
-                                    <Box>
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                mb: 1
-                                            }}
-                                        >
-                                            유저 이름
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                border: `1px solid ${theme.palette.primary.main}`,
-                                                padding: '8px',
-                                                borderRadius: '10px',
-                                                backgroundColor: '#fff',
-                                                wordBreak: 'break-word'
-                                            }}
-                                        >
-                                            Chat message example {index + 1}
-                                        </Typography>
-                                        <Typography
-                                            variant="caption"
-                                            sx={{ color: 'gray' }}
-                                        >
-                                            몇 시 몇 분
-                                        </Typography>
-                                    </Box>
-                                </Box>
-                            ))}
-                        </Box>
-                    )}
-
-                    {/* Chat Input */}
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            mt: 2,
-                        }}
-                    >
-                        <IconButton>
-                            <AttachFileIcon />
-                        </IconButton>
-                        <InputBase
-                            placeholder="Type a message..."
-                            sx={{
-                                flexGrow: 1,
-                                p: 1,
-                                border: '1px solid #ccc',
-                                borderRadius: 1,
-                                backgroundColor: '#fff',
-                            }}
-                        />
-                        <Button
-                            variant="contained"
-                            sx={{
-                                height: '100%',
-                                borderRadius: '20px',
-                                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-                                textTransform: 'none',
-                                fontWeight: 'bold',
-                                '&:hover': {
-                                    backgroundColor: alpha(theme.palette.secondary.main, 0.8),
-                                },
-                                px: 3,
-                            }}
-                        >
-                            Send
-                        </Button>
-                    </Box>
+                    <Typography variant="body1" sx={{ color: theme.palette.primary.main, mb: 2 }}>Entered: {currentChatRoom.teamName}</Typography>
+                    <ChatMessages currentChatRoom={currentChatRoom} /> {/* ChatMessages 컴포넌트 호출 */}
                 </Box>
             )}
         </Box>

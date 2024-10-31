@@ -24,6 +24,7 @@ const Home = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedSidebarItem, setSelectedSidebarItem] = useState(null);
     const user = useUser();
+    console.log(user);
 
     // 팀스페이스 불러와야 함 -> 채팅이랑 팀 헤더에 쏴줘야 함 (지금은 더미)
     const [teams, setTeams] = useState([
