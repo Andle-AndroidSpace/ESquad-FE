@@ -25,7 +25,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
+
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -38,6 +39,8 @@ const Search = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(3),
     border: '1px solid #FFD700', // Gold border for the search bar
 }));
+
+
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -61,6 +64,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam }) => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('jwt');
+        alert("로그아웃 되었습니다. 다음에 또 만나요!")
+        navigate('/login');
+    };
+
     const theme = useTheme();
     const [showSearchBar, setShowSearchBar] = useState(null);
     const [teamAnchorEl, setTeamAnchorEl] = useState(null);
@@ -292,7 +303,7 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 </MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleAccountClose}>Google 계정</MenuItem>
-                                <MenuItem onClick={handleAccountClose}>로그아웃</MenuItem>
+                                <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleAccountClose}>설정</MenuItem>
                                 <MenuItem onClick={handleAccountClose}>고객센터</MenuItem>
