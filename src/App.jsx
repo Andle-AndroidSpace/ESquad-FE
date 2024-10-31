@@ -12,6 +12,7 @@ import StudyListPage from "./pages/team/StudyListPage.jsx";
 import BookListPage from "./pages/team/BookListPage.jsx";
 import BookDetailPage from "./pages/team/BookDetailPage.jsx";
 import StudyDetailPage from "./pages/team/StudyDetailPage.jsx";
+import UserProfile from "./components/user/UserProfile.jsx"
 
 const theme = createTheme({
     palette: {
@@ -81,6 +82,9 @@ function App() {
                 <Routes>
 
                     <Route path="/" element={<Home/>} >
+
+                        <Route path="/user/profile" element={<UserProfile/>} />
+
                         <Route path="community/questions" element={<PostListPage/>} />
                         {/*<Route path="community/general" element={<PostListPage/>} />/*/}
                         {/*<Route path="community/team-recruit" element={<PostListPage/>} />*/}
