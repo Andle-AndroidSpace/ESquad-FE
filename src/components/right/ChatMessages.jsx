@@ -1,4 +1,3 @@
-// ChatMessages.jsx
 import React, { useState, useEffect } from 'react';
 import { useUser } from "../form/UserContext.jsx";
 import { fetchMessage, sendMessage, editChatMessage, deleteMessage } from "./chatApi/ChatApi.jsx";
@@ -19,9 +18,9 @@ const ChatMessages = ({ currentChatRoom }) => {
     const username = userInfo ? userInfo.username : "";
     const roomId = currentChatRoom.id;
 
+    // 메시지를 불러오는 함수
     const loadMessages = async () => {
         const fetchedMessages = await fetchMessage(roomId);
-        console.log('가져온 메시지:', fetchedMessages); // 추가된 로그
         const updatedMessages = fetchedMessages.map((msg) => {
             const savedFileUrl = localStorage.getItem(`file_${msg.id}`);
             return savedFileUrl ? { ...msg, fileUrl: savedFileUrl } : msg;
@@ -35,6 +34,7 @@ const ChatMessages = ({ currentChatRoom }) => {
         return () => clearInterval(intervalId);
     }, [roomId]);
 
+    // 메시지 전송 핸들러
     const handleSendMessage = async (messageText, file) => {
         if (messageText.trim() === "" && !file) return;
 
@@ -51,14 +51,13 @@ const ChatMessages = ({ currentChatRoom }) => {
 
         const messageData = {
             userId,
+            username, // 사용자 이름 추가
             message: file ? "" : messageText,
             roomId,
             ...(fileUrl && { fileUrl }),
         };
 
-        console.log('전송할 메시지 데이터:', messageData); // 추가된 로그
         const sendResponse = await sendMessage(messageData);
-        console.log('서버 응답:', sendResponse); // 추가된 로그
 
         if (!sendResponse || sendResponse.status !== "success") {
             console.error('메시지 전송 실패:', sendResponse);
@@ -93,11 +92,13 @@ const ChatMessages = ({ currentChatRoom }) => {
         setPreviewUrl(""); // 미리보기 URL 초기화
     };
 
+    // 메시지 수정 핸들러
     const handleEditMessageFunc = (id, currentMessage) => {
         setEditMessageId(id);
         setEditMessage(currentMessage);
     };
 
+    // 메시지 수정 저장 핸들러
     const handleSaveEditMessage = async () => {
         if (editMessage.trim() === "") return;
 
@@ -118,6 +119,7 @@ const ChatMessages = ({ currentChatRoom }) => {
         }
     };
 
+    // 메시지 삭제 핸들러
     const handleDeleteMessageFunc = async (id, fileUrl) => {
         const response = await deleteMessage(roomId, id, userId);
         console.log('삭제 응답:', response); // 추가된 로그
@@ -140,6 +142,7 @@ const ChatMessages = ({ currentChatRoom }) => {
         }
     };
 
+    // 파일 다운로드 핸들러
     const handleDownloadFile = async (fileUrl) => {
         const filename = fileUrl.split('/').pop();
         try {
@@ -170,6 +173,7 @@ const ChatMessages = ({ currentChatRoom }) => {
         }
     };
 
+    // 파일 선택 핸들러
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setSelectedFile(file);
@@ -192,10 +196,12 @@ const ChatMessages = ({ currentChatRoom }) => {
         }
     };
 
+    // 파일 업로드 클릭 핸들러
     const handleUploadClick = () => {
         document.getElementById('fileInput').click();
     };
 
+    // 파일 제거 핸들러
     const handleRemoveFile = () => {
         setSelectedFile(null);
         setMessage((prevMessage) => prevMessage.replace(/\s*\[파일: .+?\]/, ''));

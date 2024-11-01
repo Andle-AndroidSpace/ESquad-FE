@@ -37,30 +37,6 @@ const Home = () => {
     const accessToken= localStorage.getItem('jwt');
     const user = useUser();
 
-    // useAxios 커스텀 훅을 사용하여 POST 요청 설정
-    // useEffect(() => {
-    //     if (accessToken) {
-    //         fetchTeam()
-    //             .then((response) => {
-    //                 setTeams(response);
-    //             }).catch((error) => {
-    //             console.log(error);
-    //         });
-    //     }
-    // }, [accessToken]);
-    //
-    // // Listen for changes in localStorage and update accessToken state
-    // useEffect(() => {
-    //     const handleStorageChange = () => {
-    //         setAccessToken(localStorage.getItem('accessToken'));
-    //     };
-    //     window.addEventListener('storage', handleStorageChange);
-    //
-    //     return () => {
-    //         window.removeEventListener('storage', handleStorageChange);
-    //     };
-    // }, []);
-
     useEffect(() => {
         if(accessToken) {
             // alert(accessToken);
@@ -119,6 +95,10 @@ const Home = () => {
         }
     };
 
+    const updateTeamsState = (team) => {
+        setTeams(...teams, team);
+    }
+
     console.log(teams);
     return (
         <Box sx={{ display: 'flex', height: '100vh', width: '100vw' }}>
@@ -131,6 +111,7 @@ const Home = () => {
                 selectedTab={selectedTab}
                 teams={teams}
                 updateTeam={updateTeamState}
+                updateTeams={updateTeamsState}
             />
 
             {/* Home Content Area with Sidebar */}

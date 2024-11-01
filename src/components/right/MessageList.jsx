@@ -1,8 +1,7 @@
-// 채팅창 메세지 내역 ?
-// MessageList.jsx
 import React from 'react';
 import MessageItem from "./MessageItem.jsx";
-const MessageList = ({ messages, userId, username,onEditMessage, onDeleteMessage, onDownloadFile }) => {
+
+const MessageList = ({ messages, userId, username, onEditMessage, onDeleteMessage, onDownloadFile }) => {
     return (
         <div className="message-list">
             {messages.map((msg) => (
