@@ -65,7 +65,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam }) => {
+const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam, updateTeams }) => {
     const navigate = useNavigate();
     const user = useUser();
     const { userInfo } = useUser();
@@ -210,6 +210,8 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     <TeamCreationDialog
                                         open={isTeamCreationModalOpen}
                                         onClose={handleCloseCreateTeamModal}
+                                        teams={teams}
+                                        updateTeams={updateTeams}
                                     />
 
                                     {teams == null ? (

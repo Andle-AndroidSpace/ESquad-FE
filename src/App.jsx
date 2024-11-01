@@ -109,7 +109,7 @@ function App() {
                                 <Route path="study/:studyId" element={<StudyDetailPage />} />
                                 <Route path="book/search" element={<BookListPage />} />
                                 <Route path="book/search/:bookId" element={<BookDetailPage />} />
-                                <Route path="questions" element={<StudyPage />} />
+                                <Route path="questions" element={<PostListPage />} />
                             </Route>
                         </Route>
 

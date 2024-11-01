@@ -21,6 +21,7 @@ import FaceIcon from '@mui/icons-material/Face';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import dayjs from 'dayjs';
 import { useUser } from '../form/UserContext.jsx';
+import {fetchTeam} from "../../hooks/fetchTeam.jsx";
 
 const steps = ['스페이스명', '팀원 초대', '확인'];
 
@@ -155,7 +156,7 @@ function ConfirmationStep({ teamName, teamCrew }) {
     );
 }
 
-const TeamCreationHorizontalLinerStepper = ({ onCancel }) => {
+const TeamCreationHorizontalLinerStepper = ({ onCancel, updateTeams }) => {
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
     const [teamName, setTeamName] = useState('');
@@ -243,6 +244,17 @@ const TeamCreationHorizontalLinerStepper = ({ onCancel }) => {
         setTeamCrew(teamCrew.filter((tm) => tm.username !== member.username));
     };
 
+    const getTeams = () => {
+        fetchTeam()
+            .then((response) => {
+                console.log(response);
+                updateTeams(response);
+            }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+
     const handleCreateTeam = async () => {
         setLoading(true);
         console.log("Creating team with data:", {
@@ -268,6 +280,7 @@ const TeamCreationHorizontalLinerStepper = ({ onCancel }) => {
                 alert(response.data);
                 handleReset();
                 onCancel(); // Close the dialog after creating the team
+                getTeams();  // 생성한 팀 추가
             }
         } catch (error) {
             console.error("Error during team creation:", error);
