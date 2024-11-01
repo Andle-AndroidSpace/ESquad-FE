@@ -192,7 +192,6 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 anchorEl={teamAnchorEl}
                                 open={teamTabOpen}
                                 onClose={handleTeamMenuClose}
-                                onClick={handleTeamMenuClose}
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                                 transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 MenuListProps={{
