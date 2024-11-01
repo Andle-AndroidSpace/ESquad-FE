@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
-import { Box, Button, Typography, List, InputBase, Dialog, DialogContent } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Box, Button, Typography, List } from '@mui/material';
 import { alpha, useTheme } from '@mui/material';
-import PostCreationPage from '../../components/content/community/PostCreationDialog.jsx';
 import PostCreationDialog from "../../components/content/community/PostCreationDialog.jsx";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
+const PostListPage = ({ isSmallScreen }) => {
     const theme = useTheme();
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-    const [showPostDetails, setShowPostDetails] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [teamId, setTeamId] = useState(1); // 임시로 팀 ID 설정, 필요 시 업데이트
+
+    useEffect(() => {
+        // 게시글 목록을 백엔드에서 가져오는 부분
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/questions');
+                setPosts(response.data.content); // 페이징된 결과에서 content 사용
+            } catch (err) {
+                console.error("게시글을 불러오는 중 오류가 발생했습니다:", err);
+            }
+        };
+
+        fetchPosts();
+    }, []);
 
     const handleWriteButtonClick = () => {
         setIsPostModalOpen(true);
@@ -18,18 +33,10 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
         setIsPostModalOpen(false);
     };
 
-    const handlePostClick = () => {
-        setShowPostDetails(true);
-    };
-
-    const handleBackToList = () => {
-        setShowPostDetails(false);
-    };
-
     return (
         <Box
             sx={{
-                border: '1px solid',    // 실제 community board / team 데이터 render
+                border: '1px solid',
                 mb: 2,
                 height: '100%',
                 width: '100%',
@@ -37,46 +44,6 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                 overflowY: 'auto',
             }}
         >
-            {/* Filters and Search */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    mb: 3,
-                    gap: 2,
-                }}
-            >
-                <Box
-                    sx={{
-                        display: 'flex',
-                        gap: 2,
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        alignItems: 'center',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    {/*<Button variant="text" sx={{ fontSize: 'medium', fontWeight: 'bold', borderBottom: '2px solid', borderColor: theme.palette.primary.main }}>전체</Button>*/}
-                    {/*<Button variant="text" sx={{ fontSize: 'medium' }}>미해결</Button>*/}
-                    {/*<Button variant="text" sx={{ fontSize: 'medium' }}>해결됨</Button>*/}
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, width: '90%' }}>
-                    {/*<InputBase*/}
-                    {/*    placeholder="궁금한 질문을 검색해보세요!"*/}
-                    {/*    sx={{*/}
-                    {/*        width: '100%',*/}
-                    {/*        p: 1,*/}
-                    {/*        border: '1px solid #ccc',*/}
-                    {/*        borderRadius: 1,*/}
-                    {/*    }}*/}
-                    {/*/>*/}
-                    {/*<Button variant="contained" sx={{ fontSize: 'medium', backgroundColor: theme.palette.primary.main }}>검색</Button>*/}
-                </Box>
-            </Box>
-
-            {/* Sort and Write Button */}
             <Box
                 sx={{
                     display: 'flex',
@@ -87,44 +54,32 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                     gap: isSmallScreen ? 2 : 0,
                 }}
             >
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>최신순</Button>*/}
-                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>정확도순</Button>*/}
-                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>답변많은순</Button>*/}
-                    {/*<Button variant="text" sx={{color: theme.palette.text.secondary}}>좋아요순</Button>*/}
-                </Box>
                 <Button
                     variant="contained"
                     onClick={handleWriteButtonClick}
                     sx={{
                         backgroundColor: theme.palette.secondary.main,
                         color: '#fff',
-                        mr: 2,      // 질문 List 와 위치 맞춤
+                        mr: 2,
                     }}
                 >
                     글쓰기
                 </Button>
             </Box>
 
-            {/* Posts List */}
             <List
                 sx={{
                     width: '100%',
                     pr: 2,
                 }}
             >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((post, index) => (
+                {posts.map((post, index) => (
                     <Link
-                        to={`/community/questions/${post.id}`}
-                        className={`question-post-${index}`}
-                        key={index}
-                        sx={{
-                            textDecoration: 'none',
-                            color: 'inherit',
-                        }}
+                        to={`/teams/${teamId}/questions/${post.id}`}
+                        key={post.id}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
                     >
                         <Box
-                            key={index}
                             sx={{
                                 mb: 2,
                                 borderBottom: '1px solid #ddd',
@@ -141,23 +96,18 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                             }}
                         >
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexDirection: isSmallScreen ? 'column' : 'row' }}>
-                                <Button variant="outlined" size="small" disabled>미해결</Button>
-                                <Typography variant="body1" fontWeight="bold">[해결] 제목 예시 - 질문 내용이 간단히 들어가는 영역입니다.</Typography>
+                                <Button variant="outlined" size="small" disabled>{post.status || '미해결'}</Button>
+                                <Typography variant="body1" fontWeight="bold">{post.title}</Typography>
                             </Box>
-                            <Typography variant="body2" sx={{ color: theme.palette.grey[700], mb: 1 }}>질문 설명이 여기에 표시됩니다. 질문의 간단한 설명이나 내용을 보여주는 부분입니다.</Typography>
-                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
-                                {['react-native', 'typescript', 'nestjs', 'react-query', 'zustand'].map((tag, idx) => (
-                                    <Button key={idx} variant="outlined" size="small" sx={{ borderRadius: 4 }}>
-                                        {tag}
-                                    </Button>
-                                ))}
-                            </Box>
+                            <Typography variant="body2" sx={{ color: theme.palette.grey[700], mb: 1 }}>
+                                {post.content.substring(0, 100)}...
+                            </Typography>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'row', gap: isSmallScreen ? 1 : 0 }}>
-                                <Typography variant="caption" color="text.secondary">작성자 이름 · 17분 전 · 카테고리명</Typography>
+                                <Typography variant="caption" color="text.secondary">{post.writerName} · {new Date(post.createdAt).toLocaleString()}</Typography>
                                 <Box sx={{ display: 'flex', gap: 2, mt: isSmallScreen ? 1 : 0 }}>
-                                    <Typography variant="caption">👍 0</Typography>
-                                    <Typography variant="caption">👁 3</Typography>
-                                    <Typography variant="caption">💬 0</Typography>
+                                    <Typography variant="caption">👍 {post.likes}</Typography>
+                                    <Typography variant="caption">👁 {post.views || 0}</Typography>
+                                    <Typography variant="caption">💬 {post.comments?.length || 0}</Typography>
                                 </Box>
                             </Box>
                         </Box>
@@ -165,31 +115,10 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                 ))}
             </List>
 
-            {/* Pagination */}
-            <Box
-                sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',           // width: '100%', display: flex 일 때 설정하면 width 안에서 flex 잡음
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    my: 3,
-                }}
-            >
-                <Button variant="outlined" sx={{ mx: 1 }}>이전</Button>
-                {[1, 2, 3, 4, 5].map((page) => (
-                    <Button key={page} variant="text" sx={{ mx: 1 }}>{page}</Button>
-                ))}
-                <Button variant="outlined" sx={{ mx: 1 }}>다음</Button>
-            </Box>
-
-            {/* Post Creation Modal */}
+            {/* 글 작성 모달 */}
             <PostCreationDialog open={isPostModalOpen} onClose={handleClosePostModal} />
         </Box>
-
     );
 };
-
-
 
 export default PostListPage;
