@@ -5,7 +5,7 @@ import { useUser } from "/src/components/form/UserContext.jsx";
 
 const UserProfile = () => {
     const { userInfo, refetch } = useUser();
-    const {navigate} = useNavigate();
+    const navigate = useNavigate();
     useEffect(() => {
         if (!userInfo) {
             refetch();
