@@ -16,6 +16,8 @@ import PostListPage from "../community/PostListPage.jsx";
 import ChatArea from "../../components/right/ChatArea.jsx";
 import StudyPage from "../team/StudyPage.jsx";
 import {useUser} from "../../components/form/UserContext.jsx";
+import axios from "axios";
+import {fetchTeam} from "../../hooks/fetchTeam.jsx";
 
 const Home = () => {
     const theme = useTheme();
@@ -23,21 +25,64 @@ const Home = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [selectedSidebarItem, setSelectedSidebarItem] = useState(null);
-    const user = useUser();
-    console.log(user);
-
-    // 팀스페이스 불러와야 함 -> 채팅이랑 팀 헤더에 쏴줘야 함 (지금은 더미)
-    const [teams, setTeams] = useState([
-        { id: 2, teamName: "삐끼삐끼" },
-        { id: 8, teamName: "whatca" },
-        { id: 8, teamName: "쿠루쿠루" },
-        { id: 56, teamName: "냠냠" }
-    ]);
+    const [teams, setTeams] = useState([{
+        "teamName": "none",
+    }]);
+    // const [teamName, setTeamName] = useState(...teams)
     const [selectedTeam, setSelectedTeam] = useState(null);
-
     const isMediumScreen = useMediaQuery(theme.breakpoints.down('lg'));     // Below 1200px
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));      // Below 900px
     const isVerySmallScreen = useMediaQuery('(max-width: 30vw)');
+
+    const accessToken= localStorage.getItem('jwt');
+    const user = useUser();
+
+    // useAxios 커스텀 훅을 사용하여 POST 요청 설정
+    // useEffect(() => {
+    //     if (accessToken) {
+    //         fetchTeam()
+    //             .then((response) => {
+    //                 setTeams(response);
+    //             }).catch((error) => {
+    //             console.log(error);
+    //         });
+    //     }
+    // }, [accessToken]);
+    //
+    // // Listen for changes in localStorage and update accessToken state
+    // useEffect(() => {
+    //     const handleStorageChange = () => {
+    //         setAccessToken(localStorage.getItem('accessToken'));
+    //     };
+    //     window.addEventListener('storage', handleStorageChange);
+    //
+    //     return () => {
+    //         window.removeEventListener('storage', handleStorageChange);
+    //     };
+    // }, []);
+
+    useEffect(() => {
+        if(accessToken) {
+            // alert(accessToken);
+            fetchTeam()
+                .then((response) => {
+                    console.log(response);
+                    response == null ? setTeams([]) : setTeams(response);
+                }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, [accessToken]);
+
+    // useEffect to log the selected team after it updates ( 확인용 )
+    useEffect(() => {
+        if (selectedTeam !== null) {
+            console.log(`Selected tab : ${JSON.stringify(selectedTab)}, selected team : ${JSON.stringify(selectedTeam)}`);
+        }
+        if(selectedTab === 0) {
+            console.log(`Selected tab : ${JSON.stringify(selectedTab)}, selected team : ${JSON.stringify(selectedTeam)}`);
+        }
+    }, [selectedTab, selectedTeam]);
 
     // Toggle the sidebar or open the drawer based on screen size
     const handleSidebarToggle = () => {
@@ -63,6 +108,10 @@ const Home = () => {
 
     // update selectedTeam
     const updateTeamState = (i) => {
+        if (teams == null) {
+            return; // Prevent setting a selected team if there are no teams available
+        }
+
         const changeSelectTeam = teams[i];
         if (selectedTeam?.id !== changeSelectTeam.id) {
             setSelectedTab(1);
@@ -70,16 +119,7 @@ const Home = () => {
         }
     };
 
-    // useEffect to log the selected team after it updates ( 확인용 )
-    useEffect(() => {
-        if (selectedTeam !== null) {
-            console.log(`Selected tab : ${JSON.stringify(selectedTab)}, selected team : ${JSON.stringify(selectedTeam)}`);
-        }
-        if(selectedTab === 0) {
-            console.log(`Selected tab : ${JSON.stringify(selectedTab)}, selected team : ${JSON.stringify(selectedTeam)}`);
-        }
-    }, [selectedTab, selectedTeam]);
-
+    console.log(teams);
     return (
         <Box sx={{ display: 'flex', height: '100vh', width: '100vw' }}>
             <CssBaseline />
@@ -138,20 +178,6 @@ const Home = () => {
                         }}
                     >
 
-                        {/*{selectedTab === 0 && (*/}
-                        {/*    <PostListPage*/}
-                        {/*        isSmallScreen={isSmallScreen}*/}
-                        {/*        isMediumScreen={isMediumScreen}*/}
-                        {/*        selectedTab={selectedTab}*/}
-                        {/*    />*/}
-                        {/*)}*/}
-                        {/*{selectedTab === 1 && (*/}
-                        {/*    <StudyPage*/}
-                        {/*        isSmallScreen={isSmallScreen}*/}
-                        {/*        isMediumScreen={isMediumScreen}*/}
-                        {/*        selectedTab={selectedTab}*/}
-                        {/*    />*/}
-                        {/*)}*/}
                         <Outlet />
                     </Box>
 

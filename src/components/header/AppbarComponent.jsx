@@ -25,7 +25,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DeleteIcon from "@mui/icons-material/Delete";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
+import {useUser} from "../form/UserContext.jsx";
+import StudyCreatgionDialog from "../team/StudyCreationDialog.jsx";
+import TeamCreationDialog from "../team/TeamCreationDialog.jsx";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -61,6 +64,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam }) => {
+    const navigate = useNavigate();
+    const user = useUser();
+
+    const handleLogout = () => {
+        localStorage.removeItem('jwt');
+        alert("로그아웃 되었습니다. 다음에 또 만나요!")
+        navigate('/login');
+    };
+
     const theme = useTheme();
     const [showSearchBar, setShowSearchBar] = useState(null);
     const [teamAnchorEl, setTeamAnchorEl] = useState(null);
@@ -74,34 +86,15 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
     const isVerySmallScreen = useMediaQuery('(max-width: 30vw)');
 
     const teamTabOpen = Boolean(teamAnchorEl);
+    const [isTeamCreationModalOpen, setIsTeamCreationModalOpen] = useState(false);
 
-    // Handle team menu open
-    const handleTeamMenuClick = (event) => {
-        setTeamAnchorEl(event.currentTarget);
-    };
-
-    // Handle team menu close
-    const handleTeamMenuClose = () => {
-        setTeamAnchorEl(null);
-    };
+    // Handle team menu open/close
+    const handleTeamMenuClick = (event) => { setTeamAnchorEl(event.currentTarget); };
+    const handleTeamMenuClose = () => { setTeamAnchorEl(null); };
 
     // Handle notifications menu open/close
-    const handleNotificationsClick = (event) => {
-        setNotificationsAnchorEl(event.currentTarget);
-    };
-
-    const handleNotificationsClose = () => {
-        setNotificationsAnchorEl(null);
-    };
-
-    // Handle account menu open/close
-    const handleAccountClick = (event) => {
-        setAccountAnchorEl(event.currentTarget);
-    };
-
-    const handleAccountClose = () => {
-        setAccountAnchorEl(null);
-    };
+    const handleNotificationsClick = (event) => { setNotificationsAnchorEl(event.currentTarget); };
+    const handleNotificationsClose = () => { setNotificationsAnchorEl(null); };
 
     // Handle deleting a single notification
     const handleDeleteNotification = (id) => {
@@ -109,14 +102,18 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
     };
 
     // Handle deleting all notifications
-    const handleDeleteAllNotifications = () => {
-        setNotifications([]);
-    };
+    const handleDeleteAllNotifications = () => { setNotifications([]); };
+
+    // Handle account menu open/close
+    const handleAccountClick = (event) => { setAccountAnchorEl(event.currentTarget); };
+    const handleAccountClose = () => { setAccountAnchorEl(null); };
 
     // 사용자의 팀탭에서 팀 선택
-    const handleTeam = (i) => {
-        updateTeam(i);
-    };
+    const handleTeam = (i) => { updateTeam(i); };
+
+    // Handle create team dialog open/close
+    const handleCreateTeamButtonClick = () => { setIsTeamCreationModalOpen(true); };
+    const handleCloseCreateTeamModal = () => { setIsTeamCreationModalOpen(false); };
 
     return (
         <AppBar position="fixed" color="inherit" elevation={1} sx={{ width: `100%`, backgroundColor: '#fff' }}>
@@ -192,7 +189,6 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 anchorEl={teamAnchorEl}
                                 open={teamTabOpen}
                                 onClose={handleTeamMenuClose}
-                                onClick={handleTeamMenuClose}
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                                 transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                 MenuListProps={{
@@ -203,24 +199,38 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 }}
                             >
                                 <List>
-                                    <ListItem button onClick={handleTeamMenuClose} sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}>
+                                    <ListItem button onClick={handleCreateTeamButtonClick} sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}>
                                         <ListItemText primary="새로운 팀 생성" />
                                     </ListItem>
-                                    {teams.map((team, index) => (
-                                        <Link to={`/teams/${team.id}`} className={`menu-team${index}`} key={index}>
-                                            <ListItem
-                                                button
-                                                key={index}
-                                                onClick={() => handleTeam(index)}
-                                                sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}
-                                            >
-                                                <ListItemIcon>
-                                                    <Avatar alt="Team Avatar" src='/src/assets/user-avatar.png' />
-                                                </ListItemIcon>
-                                                <ListItemText primary={team.teamName} />
-                                            </ListItem>
-                                        </Link>
-                                    ))}
+
+                                    {/* Team Creation Modal */}
+                                    <TeamCreationDialog
+                                        open={isTeamCreationModalOpen}
+                                        onClose={handleCloseCreateTeamModal}
+                                    />
+
+                                    {teams == null ? (
+                                        <ListItem>
+                                            <ListItemText primary="팀이 없습니다." />
+                                        </ListItem>
+                                    ) : (
+                                        <>
+                                            {teams.map((team, index) => (
+                                                <Link to={`/teams/${team.id}`} className={`menu-team${index}`} key={index}>
+                                                    <ListItem
+                                                        button
+                                                        onClick={() => handleTeam(index)}
+                                                        sx={{ '&:hover': { cursor: 'pointer', fontSize: '1.4rem' } }}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <Avatar alt="Team Avatar" src='/src/assets/user-avatar.png' />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={team?.teamName} />
+                                                    </ListItem>
+                                                </Link>
+                                            ))}
+                                        </>
+                                    )}
                                 </List>
                             </Menu>
                         </Box>
@@ -271,7 +281,7 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     }}
                                 >
                                     <Avatar alt="User Avatar" src="/src/assets/user-avatar.png" />
-                                    <Typography variant="body1">유저 이름</Typography>
+                                    <Typography variant="body1">유저명</Typography>
                                 </IconButton>
                             </Box>
                             <Menu
@@ -292,7 +302,7 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                 </MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleAccountClose}>Google 계정</MenuItem>
-                                <MenuItem onClick={handleAccountClose}>로그아웃</MenuItem>
+                                <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleAccountClose}>설정</MenuItem>
                                 <MenuItem onClick={handleAccountClose}>고객센터</MenuItem>

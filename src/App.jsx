@@ -46,7 +46,7 @@ function App() {
         if (token) {
             setIsLoggedIn(true);
         }
-    }, []);
+    }, [isLoggedIn]);
 
     const ProtectedRoute = ({ children }) => {
         const token = localStorage.getItem('jwt');
@@ -84,8 +84,8 @@ function App() {
                                 <Home />
                             </ProtectedRoute>
                         }>
-                            <Route path="community/questions" element={<PostListPage />} />
-                            <Route path="community/questions/:postId" element={<PostDetailsPage />} />
+                            {/*<Route path="community/questions" element={<PostListPage />} />*/}
+                            {/*<Route path="community/questions/:postId" element={<PostDetailsPage />} />*/}
                             {/* Add other community routes as needed */}
                             {/* <Route path="community/general" element={<PostListPage />} /> */}
                             {/* <Route path="community/team-recruit" element={<PostListPage />} /> */}
