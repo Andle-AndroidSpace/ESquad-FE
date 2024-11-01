@@ -17,6 +17,8 @@ import UserProfile from "./components/user/UserProfile.jsx";
 import FindPassword from "./components/form/FindPassword.jsx";
 import FindUsername from "./components/form/FindUsername.jsx";
 import UserPasswordUpdate from "./components/user/UserPasswordUpdate.jsx";
+import UserUpdate from "./components/user/UserUpdate.jsx";
+import UserInquiry from "./components/user/UserInquiry.jsx";
 
 const theme = createTheme({
     palette: {
@@ -99,6 +101,8 @@ function App() {
                             {/* <Route path="community/team-recruit" element={<PostListPage />} /> */}
                             <Route path= "/user/profile" element={<UserProfile />} />
                             <Route path= "/user/password" element={<UserPasswordUpdate/>} />
+                            <Route path= "/user/update" element={<UserUpdate/>} />
+                            <Route path= "/user/inquiry" element={<UserInquiry/>} />
 
                             <Route path="teams/:teamId" element={<StudyPage />}>
                                 <Route path="study" element={<StudyListPage />} />
