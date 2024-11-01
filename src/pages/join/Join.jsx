@@ -1,22 +1,64 @@
 // src/components/Join.jsx
 import React from 'react';
 import JoinForm from '../../components/form/JoinForm';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 
 const Join = () => {
-  return (
-    <div className="flex w-full h-screen">
-      {/* Background Section */}
-      <div className="relative hidden lg:flex h-full w-1/2 items-center justify-center bg-gray-200">
-        <div className='w-60 h-60 bg-gradient-to-tr from-violet-500 to-pink-500 rounded-full animate-bounce'/>
-        <div className="w-full h-1/2 absolute bottom-0 bg-white/10 backdrop-blur-lg"/>
-      </div>
+    return (
+        <Grid container sx={{ height: '100vh' }}>
+            {/* Background Section */}
+            <Grid
+                item
+                xs={false}
+                lg={6}
+                sx={{
+                    display: { xs: 'none', lg: 'flex' },
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'grey.200',
+                    position: 'relative',
+                }}
+            >
+                <Box
+                    sx={{
+                        width: 240,
+                        height: 240,
+                        background: 'linear-gradient(to top right, #7c4dff, #ff4081)',
+                        borderRadius: '50%',
+                        animation: 'bounce 2s infinite',
+                    }}
+                />
+                <Box
+                    sx={{
+                        width: '100%',
+                        height: '50%',
+                        position: 'absolute',
+                        bottom: 0,
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(10px)',
+                    }}
+                />
+            </Grid>
 
-      {/* Form Section */}
-      <div className='w-full lg:w-1/2 flex items-center justify-center bg-gray-100'>
-        <JoinForm />
-      </div>
-    </div>
-  );
+            {/* Form Section */}
+            <Grid
+                item
+                xs={12}
+                lg={6}
+                component={Paper}
+                elevation={6}
+                square
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'grey.100',
+                }}
+            >
+                <JoinForm />
+            </Grid>
+        </Grid>
+    );
 };
 
 export default Join;
