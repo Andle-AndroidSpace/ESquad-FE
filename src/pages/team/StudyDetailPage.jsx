@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Typography,
@@ -14,49 +14,105 @@ import {
     Button,
 } from '@mui/material';
 import {useLocation, useParams} from "react-router-dom";
+import axios from 'axios'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import bookProfileManAndSea from '../../assets/book-profile-man-and-sea.jpg';
+import PropTypes from "prop-types";
 
 
 const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
     const location = useLocation();
     const study = location.state.study;
-    const params = useParams();
-    const [isStudyDeleteModalOpen, setIsStudyDeleteModalOpen] = useState(false);
-    const [attachments, setAttachments] = useState(study.attachments || []);
+    const {studyId} = useParams();
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [isUploading, setIsUploading] = useState(false);
     const [selectedFile, setSelectedFile] = useState();
 
-    const handleDeleteButtonClick = () => {
-        setIsStudyDeleteModalOpen(true);
-    };
+    useEffect(() => {
+        const fetchFiles = async () => {
+            try {
+                const response = await axios.get(`/api/files/STUDY_PAGE/${studyId}`);
+                setUploadedFiles(response.data);
+            } catch (error) {
+                console.error('Failed to fetch files:', error);
+            }
+        };
 
-    const handleCloseStudyDeleteModal = () => {
-        setIsStudyDeleteModalOpen(false);
-    };
+        fetchFiles().then();
+    }, [studyId]);
 
-    const handleAddAttachment = (event) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
     };
+    const handleFileUpload = async () => {
+        if (!selectedFile) {
+            return;
+        }
+        setIsUploading(true);
 
-    const handleUploadAttachment = () => {
-        if (selectedFile) {
-            const newAttachment = {
-                name: selectedFile.name,
-                id: selectedFile.name + Date.now(), // Generate unique ID for the file
-            };
-            setAttachments([...attachments, newAttachment]);
-            setSelectedFile(null);
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('targetId', studyId);
+        formData.append('targetType', 'STUDY_PAGE');
+
+        try {
+            const token = localStorage.getItem('jwt');
+            const response = await axios.post(`/api/files`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
+                },
+            });
+            setUploadedFiles((prevFiles) => [...prevFiles, response.data]);
+
+            fetchFiles()
+            setSelectedFile(null); // 업로드 후 선택된 파일 상태 초기화
+        } catch (error) {
+            console.error('Failed to upload file:', error);
+        } finally {
+            setIsUploading(false);
         }
     };
 
-    const handleDeleteAttachment = (index) => {
-        const updatedAttachments = attachments.filter((_, i) => i !== index);
-        setAttachments(updatedAttachments);
+    const handleFileDelete = async (storedFileName) => {
+        try {
+            await axios.delete(`/api/files/${storedFileName}`);
+            setUploadedFiles((prevFiles) =>
+                prevFiles.filter((file) => file.storedFileName !== storedFileName)
+            );
+        } catch (error) {
+            console.error('Failed to delete file:', error);
+        }
     };
+
+    const handleFileDownload = async (storedFileName, originalFileName) => {
+        try {
+            const response = await axios.get(`/api/files/${storedFileName}`, {
+                responseType: 'blob', // Blob 형식으로 데이터 받기
+            });
+
+            const blob = new Blob([response.data],
+                {type: response.headers['content-type']});
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = originalFileName || storedFileName; // 다운로드할 파일 이름 지정
+            document.body.appendChild(link);
+            link.click();
+
+            // 다운로드가 완료된 후, URL과 링크를 정리
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Failed to download file:', error);
+        }
+    };
+
 
     return (
         <Box
@@ -124,7 +180,7 @@ const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
                             <input
                                 type="file"
                                 hidden
-                                onChange={handleAddAttachment}
+                                onChange={handleFileChange}
                             />
                         </Button>
 
@@ -146,23 +202,31 @@ const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
                             <Button
                                 variant="contained"
                                 color="secondary"
-                                onClick={handleUploadAttachment}
+                                onClick={handleFileUpload}
+                                disabled={isUploading}
                             >
-                                업로드
+                                {isUploading ? '업로드 중...' : '등록'}
                             </Button>
                         </Box>
                     )}
 
                     {/* Attachments List */}
                     <List>
-                        {attachments && attachments.length > 0 ? (
-                            attachments.map((attachment, index) => (
-                                <ListItem key={index}>
+                        {uploadedFiles && uploadedFiles.length > 0 ? (
+                            uploadedFiles.map((file) => (
+                                <ListItem key={file.id}>
                                     <ListItemIcon>
                                         <AttachFileIcon />
                                     </ListItemIcon>
-                                    <ListItemText primary={attachment.name} />
-                                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteAttachment(index)}>
+                                    <ListItemText primary={file.originalFileName}/>
+                                    <ListItemText primary={file.createdAt}/>
+                                    <ListItemText primary={file.fileSize}/>
+
+
+                                    <IconButton edge="end" aria-label="download" onClick={() => handleFileDownload(file.storedFileName, file.originalFileName)}>
+                                        <DownloadIcon />
+                                    </IconButton>
+                                    <IconButton edge="end" aria-label="delete" onClick={() => handleFileDelete(file.storedFileName)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </ListItem>
@@ -186,5 +250,16 @@ const StudyDetailPage = ({ isSmallScreen, isMediumScreen }) => {
         </Box>
     );
 };
-
+StudyDetailPage.propTypes = { // 노란줄 안 뜨게 하려고 배열 내부 객체에 대한 명시
+    uploadedFiles: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            storedFileName: PropTypes.string.isRequired,
+            originalFileName: PropTypes.string.isRequired,
+            userNickname: PropTypes.string.isRequired,
+            createdAt: PropTypes.string.isRequired,
+            fileSize: PropTypes.number.isRequired,
+        })
+    ).isRequired,
+};
 export default StudyDetailPage;
