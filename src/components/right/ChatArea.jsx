@@ -5,9 +5,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
 const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
+
     const theme = useTheme();
     const [currentChatRoom, setCurrentChatRoom] = useState(teams[0]);
-    console.log(user);
 
     // Chat Room Selection Handler
     const handleChatRoomSelect = (room) => {
@@ -40,31 +40,33 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
                         pb: 1,
                     }}
                 >
-                    {teams.map((team, index) => (
-                        <Button
-                            key={index}
-                            onClick={() => handleChatRoomSelect(team)}
-                            className="chat-room-button"
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                p: 1,
-                                backgroundColor: currentChatRoom?.id === team.id ? alpha(theme.palette.primary.main, 0.1) : '#fff',
-                                borderRadius: 1,
-                                '&:hover': {
-                                    backgroundColor: alpha(theme.palette.primary.main, 0.2),
-                                },
-                                border: '1px solid',
-                                borderColor: currentChatRoom?.id === team.id ? '#D1C4E9' : theme.palette.primary.main,
-                                minWidth: isSmallScreen ? '80px' : '120px', // Adjust button width based on screen size
-                                fontSize: isSmallScreen ? '0.75rem' : '1rem', // Adjust font size based on screen size
-                                mb: 1,
-                            }}
-                        >
-                            {team.teamName}
-                        </Button>
-                    ))}
+                    {teams.length > 0 ? (
+                        teams.map((team, index) => (
+                            <Button
+                                key={index}
+                                onClick={() => handleChatRoomSelect(team)}
+                                className="chat-room-button"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    p: 1,
+                                    backgroundColor: currentChatRoom?.id === team.id ? alpha(theme.palette.primary.main, 0.1) : '#fff',
+                                    borderRadius: 1,
+                                    '&:hover': {
+                                        backgroundColor: alpha(theme.palette.primary.main, 0.2),
+                                    },
+                                    border: '1px solid',
+                                    borderColor: currentChatRoom?.id === team.id ? '#D1C4E9' : theme.palette.primary.main,
+                                    minWidth: isSmallScreen ? '80px' : '120px', // Adjust button width based on screen size
+                                    fontSize: isSmallScreen ? '0.75rem' : '1rem', // Adjust font size based on screen size
+                                    mb: 1,
+                                }}
+                            >
+                                {team.teamName}
+                            </Button>
+                        ))
+                    ) : null}
                 </Box>
             )}
 
@@ -92,31 +94,33 @@ const ChatArea = ({ isSmallScreen, isMediumScreen, teams, user }) => {
                             pr: 2,
                         }}
                     >
-                        {teams.map((team, index) => (
-                            <Button
-                                key={index}
-                                onClick={() => handleChatRoomSelect(team)}
-                                className="chat-room-button"
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    p: 1,
-                                    backgroundColor: currentChatRoom?.id === team.id ? alpha(theme.palette.primary.main, 0.1) : '#fff',
-                                    borderRadius: 1,
-                                    '&:hover': {
-                                        backgroundColor: alpha(theme.palette.primary.main, 0.2),
-                                    },
-                                    border: '1px solid',
-                                    borderColor: currentChatRoom?.id === team.id ? '#D1C4E9' : theme.palette.primary.main,
-                                    minWidth: isSmallScreen ? '80px' : '120px', // Adjust button width based on screen size
-                                    fontSize: isSmallScreen ? '0.75rem' : '1rem', // Adjust font size based on screen size
-                                    mb: 1,
-                                }}
-                            >
-                                {team.teamName}
-                            </Button>
-                        ))}
+                        {teams.length > 0 ? (
+                            teams.map((team, index) => (
+                                <Button
+                                    key={index}
+                                    onClick={() => handleChatRoomSelect(team)}
+                                    className="chat-room-button"
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        p: 1,
+                                        backgroundColor: currentChatRoom?.id === team.id ? alpha(theme.palette.primary.main, 0.1) : '#fff',
+                                        borderRadius: 1,
+                                        '&:hover': {
+                                            backgroundColor: alpha(theme.palette.primary.main, 0.2),
+                                        },
+                                        border: '1px solid',
+                                        borderColor: currentChatRoom?.id === team.id ? '#D1C4E9' : theme.palette.primary.main,
+                                        minWidth: isSmallScreen ? '80px' : '120px', // Adjust button width based on screen size
+                                        fontSize: isSmallScreen ? '0.75rem' : '1rem', // Adjust font size based on screen size
+                                        mb: 1,
+                                    }}
+                                >
+                                    {team.teamName}
+                                </Button>
+                            ))
+                        ): null}
                     </Box>
 
                     {/* Chat Messages - Right Column */}
