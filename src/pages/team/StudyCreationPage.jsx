@@ -115,7 +115,7 @@ const StudyCreationPage = ({ onCancel, selectedBook }) => {
                 <Grid item xs={12} md={4}>
                     <Box
                         component="img"
-                        src={selectedBook.src}
+                        src={selectedBook.image}
                         alt={selectedBook.title}
                         sx={{
                             width: '60%',

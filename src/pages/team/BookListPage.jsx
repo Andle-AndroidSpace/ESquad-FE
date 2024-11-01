@@ -22,16 +22,7 @@ const BookListPage = ({ isSmallScreen, isMediumScreen }) => {
     const navigate = useNavigate();
     const { userInfo } = useUser();
     const [query, setQuery] = useState('');
-    const [books, setBooks] = useState([
-        {"id": 2, "isbn": '8012231', "title": '노인과 바다1', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 7, "isbn": '46821', "title": '노인과 바다2', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 94, "isbn": '5838', "title": '노인과 바다3', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 22, "isbn": '3dl328', "title": '노인과 바다4', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 19, "isbn": '855e25f23', "title": '노인과 바다5', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 127, "isbn": 'd55425d58', "title": '노인과 바다6', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 76, "isbn": '89432d1d8', "title": '노인과 바다7', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-        {"id": 99, "isbn": '052545', "title": '노인과 바다8', "writer": "kelin Macrke", "description": "책에 대한 소개소개소개소개소개소개소개소개", "publish": '샘샘', "src": "/src/assets/book-profile-man-and-sea.jpg"},
-    ]);
+    const [books, setBooks] = useState([]);
 
     const handleStreamingButtonClick = (username) => {
         const popupUrl = `https://webrtc.store/esquad?name=${encodeURIComponent(username)}`;
