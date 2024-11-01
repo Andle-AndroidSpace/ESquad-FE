@@ -81,8 +81,13 @@ const LoginForm = ({ setIsLoggedIn }) => {
                     sx={{ mt: 2 }}
                 />
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-                    <Button color='primary' variant='text'>아이디를 잊어버렸나요?</Button>
-                    <Button color='primary' variant='text'>패스워드를 잊어버렸나요?</Button>
+                    <Link to="/find-username">
+                        <Button color='primary' variant='text'>아이디를 잊어버렸나요?</Button>
+                    </Link>
+
+                    <Link to="/find-password">
+                        <Button color='primary' variant='text'>패스워드를 잊어버렸나요?</Button>
+                    </Link>
                 </Box>
                 <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <Button

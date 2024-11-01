@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { Box, Avatar, Typography, Button } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import {useUser} from "../../components/form/UserContext.jsx"
 
 const UserProfile = () => {
 

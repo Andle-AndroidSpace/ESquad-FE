@@ -26,6 +26,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DeleteIcon from "@mui/icons-material/Delete";
 import {Link, NavLink, useNavigate} from "react-router-dom";
+import {useUser} from "../form/UserContext.jsx";
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -65,6 +66,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam }) => {
     const navigate = useNavigate();
+    const { userInfo } = useUser();
 
     const handleLogout = () => {
         localStorage.removeItem('jwt');
@@ -282,7 +284,7 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     }}
                                 >
                                     <Avatar alt="User Avatar" src="/src/assets/user-avatar.png" />
-                                    <Typography variant="body1">유저 이름</Typography>
+                                    <Typography variant="body1">{userInfo ? userInfo.nickname : "유저 이름"}</Typography>
                                 </IconButton>
                             </Box>
                             <Menu

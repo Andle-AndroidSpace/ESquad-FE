@@ -13,6 +13,9 @@ import BookListPage from "./pages/team/BookListPage.jsx";
 import BookDetailPage from "./pages/team/BookDetailPage.jsx";
 import StudyDetailPage from "./pages/team/StudyDetailPage.jsx";
 import PostDetailsPage from "./pages/community/PostDetailsPage.jsx";
+import UserProfile from "./components/user/UserProfile.jsx";
+import FindPassword from "./components/form/FindPassword.jsx";
+import FindUsername from "./components/form/FindUsername.jsx";
 
 const theme = createTheme({
     palette: {
@@ -70,6 +73,7 @@ function App() {
             <UserProvider>
                 <BrowserRouter>
                     <Routes>
+
                         {/* Redirect logged-in users away from the login page */}
                         <Route path="/login" element={
                             <RedirectIfLoggedIn>
@@ -77,6 +81,9 @@ function App() {
                             </RedirectIfLoggedIn>
                         } />
                         <Route path="/join" element={<Join />} />
+
+                        <Route path= "/find-password" element={<FindPassword />} />
+                        <Route path= "/find-username" element={<FindUsername />} />
 
                         {/* Protect routes that require authentication */}
                         <Route path="/" element={
@@ -89,6 +96,7 @@ function App() {
                             {/* Add other community routes as needed */}
                             {/* <Route path="community/general" element={<PostListPage />} /> */}
                             {/* <Route path="community/team-recruit" element={<PostListPage />} /> */}
+
 
                             <Route path="teams/:teamId" element={<StudyPage />}>
                                 <Route path="study" element={<StudyListPage />} />
