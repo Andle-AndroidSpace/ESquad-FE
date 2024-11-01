@@ -3,6 +3,7 @@ import { Box, Button, Typography, List, InputBase, Dialog, DialogContent } from 
 import { alpha, useTheme } from '@mui/material';
 import PostCreationPage from '../../components/content/community/PostCreationDialog.jsx';
 import PostCreationDialog from "../../components/content/community/PostCreationDialog.jsx";
+import {Link} from "react-router-dom";
 
 const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
     const theme = useTheme();
@@ -113,44 +114,54 @@ const PostListPage = ({ isSmallScreen, isMediumScreen }) => {
                 }}
             >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((post, index) => (
-                    <Box
+                    <Link
+                        to={`/community/questions/${post.id}`}
+                        className={`question-post-${index}`}
                         key={index}
                         sx={{
-                            mb: 2,
-                            borderBottom: '1px solid #ddd',
-                            px: 2,
-                            py: 2,
-                            '&:hover': {
-                                backgroundColor: alpha(theme.palette.primary.light, 0.1),
-                                cursor: 'pointer',
-                            },
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: isSmallScreen ? 'center' : 'stretch',
-                            justifyContent: isSmallScreen ? 'center' : 'flex-start'
+                            textDecoration: 'none',
+                            color: 'inherit',
                         }}
                     >
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexDirection: isSmallScreen ? 'column' : 'row' }}>
-                            {/*<Button variant="outlined" size="small" disabled>미해결</Button>*/}
-                            <Typography variant="body1" fontWeight="bold">[해결] 제목 예시 - 질문 내용이 간단히 들어가는 영역입니다.</Typography>
-                        </Box>
-                        <Typography variant="body2" sx={{ color: theme.palette.grey[700], mb: 1 }}>질문 설명이 여기에 표시됩니다. 질문의 간단한 설명이나 내용을 보여주는 부분입니다.</Typography>
-                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
-                            {['react-native', 'typescript', 'nestjs', 'react-query', 'zustand'].map((tag, idx) => (
-                                <Button key={idx} variant="outlined" size="small" sx={{ borderRadius: 4 }}>
-                                    {tag}
-                                </Button>
-                            ))}
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'row', gap: isSmallScreen ? 1 : 0 }}>
-                            <Typography variant="caption" color="text.secondary">작성자 이름 · 17분 전 · 카테고리명</Typography>
-                            <Box sx={{ display: 'flex', gap: 2, mt: isSmallScreen ? 1 : 0 }}>
-                                <Typography variant="caption">👍 0</Typography>
-                                <Typography variant="caption">👁  3</Typography>
-                                <Typography variant="caption">💬 0</Typography>
+                        <Box
+                            key={index}
+                            sx={{
+                                mb: 2,
+                                borderBottom: '1px solid #ddd',
+                                px: 2,
+                                py: 2,
+                                '&:hover': {
+                                    backgroundColor: alpha(theme.palette.primary.light, 0.1),
+                                    cursor: 'pointer',
+                                },
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: isSmallScreen ? 'center' : 'stretch',
+                                justifyContent: isSmallScreen ? 'center' : 'flex-start'
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexDirection: isSmallScreen ? 'column' : 'row' }}>
+                                <Button variant="outlined" size="small" disabled>미해결</Button>
+                                <Typography variant="body1" fontWeight="bold">[해결] 제목 예시 - 질문 내용이 간단히 들어가는 영역입니다.</Typography>
+                            </Box>
+                            <Typography variant="body2" sx={{ color: theme.palette.grey[700], mb: 1 }}>질문 설명이 여기에 표시됩니다. 질문의 간단한 설명이나 내용을 보여주는 부분입니다.</Typography>
+                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
+                                {['react-native', 'typescript', 'nestjs', 'react-query', 'zustand'].map((tag, idx) => (
+                                    <Button key={idx} variant="outlined" size="small" sx={{ borderRadius: 4 }}>
+                                        {tag}
+                                    </Button>
+                                ))}
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'row', gap: isSmallScreen ? 1 : 0 }}>
+                                <Typography variant="caption" color="text.secondary">작성자 이름 · 17분 전 · 카테고리명</Typography>
+                                <Box sx={{ display: 'flex', gap: 2, mt: isSmallScreen ? 1 : 0 }}>
+                                    <Typography variant="caption">👍 0</Typography>
+                                    <Typography variant="caption">👁 3</Typography>
+                                    <Typography variant="caption">💬 0</Typography>
+                                </Box>
                             </Box>
                         </Box>
-                    </Box>
+                    </Link>
                 ))}
             </List>
 

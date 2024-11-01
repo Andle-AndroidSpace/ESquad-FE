@@ -1,9 +1,13 @@
 import React from 'react';
 import { Box, Typography, Button, InputBase, Divider } from '@mui/material';
 import { useTheme } from '@mui/material';
+import {useLocation, useParams} from "react-router-dom";
 
-const PostDetailsPage = ({ onBack }) => {
+const PostDetailsPage = ({ isSmallScreen, isMediumScreen, onBack }) => {
     const theme = useTheme();
+    const study = location.state.study;
+    const params = useParams();
+    const post = {"id": 32, "writer": "룰루레몬", "title": "테스트부치기", "description": "룰루랄라라람", "likes": 2}
 
     return (
         <Box sx={{ width: '100%', p: 2 }}>
