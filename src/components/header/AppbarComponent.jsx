@@ -42,6 +42,8 @@ const Search = styled('div')(({ theme }) => ({
     border: '1px solid #FFD700', // Gold border for the search bar
 }));
 
+
+
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
@@ -66,6 +68,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, updateTeam }) => {
     const navigate = useNavigate();
     const user = useUser();
+    const { userInfo } = useUser();
 
     const handleLogout = () => {
         localStorage.removeItem('jwt');
@@ -281,7 +284,7 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     }}
                                 >
                                     <Avatar alt="User Avatar" src="/src/assets/user-avatar.png" />
-                                    <Typography variant="body1">유저명</Typography>
+                                    <Typography variant="body1">{userInfo ? userInfo.nickname : "유저 이름"}</Typography>
                                 </IconButton>
                             </Box>
                             <Menu
@@ -298,7 +301,9 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     }}
                                 >
                                     <Avatar />
-                                    <Typography variant="body1">프로필 보기</Typography>
+                                    <Link to= "/user/profile">
+                                        <Typography variant="body1">프로필 보기</Typography>
+                                    </Link>
                                 </MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleAccountClose}>Google 계정</MenuItem>
