@@ -1,0 +1,12 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 500px; /* 원하는 높이로 설정 */
+    border: 1px solid #ccc; /* 채팅창 테두리 */
+    overflow: hidden; /* Overflow 숨기기 */
+}
+
+.message-list {
+    flex: 1; /* 메시지 리스트가 채팅창을 차지하도록 함 */
+    overflow-y: auto; /* 세로 스크롤 허용 */
+}
