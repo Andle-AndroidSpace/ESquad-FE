@@ -11,18 +11,18 @@ const PostListPage = ({ isSmallScreen }) => {
     const [posts, setPosts] = useState([]);
     const [teamId, setTeamId] = useState(1); // 임시로 팀 ID 설정, 필요 시 업데이트
 
-    useEffect(() => {
-        // 게시글 목록을 백엔드에서 가져오는 부분
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/questions');
-                setPosts(response.data.content); // 페이징된 결과에서 content 사용
-            } catch (err) {
-                console.error("게시글을 불러오는 중 오류가 발생했습니다:", err);
-            }
-        };
+    // 게시글 목록을 불러오는 함수
+    const fetchPosts = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/questions');
+            setPosts(response.data.content); // 페이징된 결과에서 content 사용
+        } catch (err) {
+            console.error("게시글을 불러오는 중 오류가 발생했습니다:", err);
+        }
+    };
 
-        fetchPosts();
+    useEffect(() => {
+        fetchPosts(); // 컴포넌트가 마운트될 때 게시글 목록 불러오기
     }, []);
 
     const handleWriteButtonClick = () => {
@@ -31,6 +31,7 @@ const PostListPage = ({ isSmallScreen }) => {
 
     const handleClosePostModal = () => {
         setIsPostModalOpen(false);
+        fetchPosts(); // 글 작성 후 게시글 목록 갱신
     };
 
     return (
@@ -72,7 +73,7 @@ const PostListPage = ({ isSmallScreen }) => {
                     pr: 2,
                 }}
             >
-                {posts.map((post, index) => (
+                {posts.map((post) => (
                     <Link
                         to={`/teams/${teamId}/questions/${post.id}`}
                         key={post.id}
