@@ -47,10 +47,9 @@ const PostListPage = ({ isSmallScreen }) => {
             <Box
                 sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-end', // 글쓰기 버튼을 오른쪽 정렬
                     alignItems: 'center',
                     mb: 2,
-                    flexDirection: isSmallScreen ? 'column' : 'row',
                     gap: isSmallScreen ? 2 : 0,
                 }}
             >

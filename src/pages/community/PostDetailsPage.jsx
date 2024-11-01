@@ -65,6 +65,10 @@ const PostDetailsPage = () => {
         }
     };
 
+    const handleEdit = () => {
+        navigate(`/teams/1/questions/${postId}/edit`);
+    };
+
     const handleDelete = async () => {
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
         if (!confirmDelete) return;
@@ -72,12 +76,12 @@ const PostDetailsPage = () => {
         try {
             const response = await axios.delete(`http://localhost:8080/api/questions/${postId}`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`, // 인증 헤더 추가
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                 },
             });
-            if (response.status === 200 || response.status === 204) { // 상태 코드 확인
+            if (response.status === 200 || response.status === 204) {
                 alert("게시글이 삭제되었습니다.");
-                navigate("/teams/1/questions"); // 질문 목록으로 이동
+                navigate("/teams/1/questions");
             } else {
                 console.error("게시글 삭제 요청이 성공적으로 처리되지 않았습니다.");
             }
@@ -103,7 +107,7 @@ const PostDetailsPage = () => {
                     </Typography>
                 </Box>
                 <Box>
-                    <Button variant="outlined" onClick={() => navigate(`/edit/${postId}`)} sx={{ mr: 1 }}>
+                    <Button variant="outlined" onClick={handleEdit} sx={{ mr: 1 }}>
                         수정
                     </Button>
                     <Button variant="outlined" color="error" onClick={handleDelete}>
@@ -164,7 +168,7 @@ const PostDetailsPage = () => {
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
                                 {new Date(comment.createdAt).toLocaleString()}
-                            </Typography>
+                            </Typography>d
                         </Box>
                         <Typography variant="body2" sx={{ mt: 1 }}>
                             {comment.content}
