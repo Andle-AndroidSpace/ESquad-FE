@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Avatar, Typography, Button } from '@mui/material';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useUser } from '/src/components/form/UserContext.jsx';
 
 const UserProfile = () => {
-
+    const { userInfo } = useUser();
 
     return (
         <Box
@@ -30,18 +31,18 @@ const UserProfile = () => {
                 }}
             >
                 <Avatar
-                    alt="User Avatar"
-                    src="/path/to/avatar.png" // 사용자 아바타 이미지 경로
+                    alt="사용자 아바타"
+                    src={userInfo?.avatarUrl || "/path/to/default-avatar.png"} // 사용자 아바타 이미지 경로
                     sx={{ width: 100, height: 100, mb: 2 }}
                 />
                 <Typography variant="h6" gutterBottom>
-                    이정민
+                    {userInfo?.nickname || '이정민'}
                 </Typography>
                 <Typography variant="body1" color="text.secondary" gutterBottom>
-                    jeongmin0046@gmail.com
+                    {userInfo?.email || 'jeongmin0046@gmail.com'}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                    010-6276-2251
+                    {userInfo?.phoneNumber || '010-6276-2251'}
                 </Typography>
                 <Button variant="contained" color="primary" sx={{ alignSelf: 'flex-end', width: '120px' }}>
                     수정
@@ -66,8 +67,8 @@ const UserProfile = () => {
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                     개인정보를 위해 비밀번호를 변경해 주세요.
                 </Typography>
-                <Link to="/user/password">
-                    <Button variant="outlined" color="primary" sx={{ alignSelf: 'flex-end', width: '150px' }}>
+                <Link to="/user/password" style={{ alignSelf: 'flex-end', width: '150px' }}>
+                    <Button variant="outlined" color="primary" sx={{ width: '100%' }}>
                         비밀번호 변경
                     </Button>
                 </Link>
