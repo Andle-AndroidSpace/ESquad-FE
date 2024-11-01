@@ -4,7 +4,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage, onDownloadFile, fileUrl }) => {
+const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage, onDownloadFile }) => {
     const timestamp = new Date(message.timestamp).toLocaleTimeString();
 
     const isImage = (url) => {
@@ -41,7 +41,7 @@ const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage,
                     className="message-user"
                     style={{ fontWeight: 'bold', color: '#333', marginBottom: '0.3rem' }}
                 >
-                    {currentUsername || message.userId}
+                    {message.username || message.userId} {/* 사용자 이름 표시 */}
                 </span>
 
                 {message.message && (
@@ -50,10 +50,10 @@ const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage,
                     </span>
                 )}
 
-                {fileUrl && isImage(fileUrl) && (
+                {message.fileUrl && isImage(message.fileUrl) && (
                     <div className="image-preview" style={{ marginTop: '0.5rem' }}>
                         <img
-                            src={fileUrl}
+                            src={message.fileUrl}
                             alt="파일 미리보기"
                             style={{ maxWidth: '150px', maxHeight: '150px', borderRadius: '8px', marginTop: '0.5rem' }}
                         />
@@ -65,11 +65,11 @@ const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage,
                 className="message-actions"
                 style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'flex-end', alignSelf: 'flex-end' }}
             >
-                {fileUrl && (
+                {message.fileUrl && (
                     <IconButton
                         color="primary"
                         size="small"
-                        onClick={() => onDownloadFile(fileUrl)}
+                        onClick={() => onDownloadFile(message.fileUrl)}
                         aria-label="파일 다운로드"
                         style={{ marginRight: '0.5rem' }}
                     >
@@ -77,7 +77,7 @@ const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage,
                     </IconButton>
                 )}
 
-                {!fileUrl && (
+                {!message.fileUrl && (
                     <IconButton
                         color="secondary"
                         size="small"
@@ -92,7 +92,7 @@ const MessageItem = ({ message, currentUsername, onEditMessage, onDeleteMessage,
                 <IconButton
                     color="error"
                     size="small"
-                    onClick={() => onDeleteMessage(message.id, fileUrl)}
+                    onClick={() => onDeleteMessage(message.id, message.fileUrl)}
                     aria-label="메시지 삭제"
                 >
                     <DeleteIcon />

@@ -1,4 +1,3 @@
-// ChatMessages.jsx
 import React, { useState, useEffect } from 'react';
 import { useUser } from "../form/UserContext.jsx";
 import { fetchMessage, sendMessage, editChatMessage, deleteMessage } from "./chatApi/ChatApi.jsx";
@@ -52,6 +51,7 @@ const ChatMessages = ({ currentChatRoom }) => {
 
         const messageData = {
             userId,
+            username, // 사용자 이름 추가
             message: file ? "" : messageText,
             roomId,
             ...(fileUrl && { fileUrl }),
