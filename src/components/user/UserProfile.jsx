@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Avatar, Typography, Button } from '@mui/material';
+import {Link} from "react-router-dom";
 
 const UserProfile = () => {
 
@@ -65,9 +66,11 @@ const UserProfile = () => {
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                     개인정보를 위해 비밀번호를 변경해 주세요.
                 </Typography>
-                <Button variant="outlined" color="primary" sx={{ alignSelf: 'flex-end', width: '150px' }}>
-                    비밀번호 변경
-                </Button>
+                <Link to="/user/password">
+                    <Button variant="outlined" color="primary" sx={{ alignSelf: 'flex-end', width: '150px' }}>
+                        비밀번호 변경
+                    </Button>
+                </Link>
             </Box>
 
             <Box

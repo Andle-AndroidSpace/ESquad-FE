@@ -301,7 +301,9 @@ const AppBarComponent = ({ handleSidebarToggle, handleTab, selectedTab, teams, u
                                     }}
                                 >
                                     <Avatar />
-                                    <Typography variant="body1">프로필 보기</Typography>
+                                    <Link to= "/user/profile">
+                                        <Typography variant="body1">프로필 보기</Typography>
+                                    </Link>
                                 </MenuItem>
                                 <Divider />
                                 <MenuItem onClick={handleAccountClose}>Google 계정</MenuItem>

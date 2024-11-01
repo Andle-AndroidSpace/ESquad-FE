@@ -16,6 +16,7 @@ import PostDetailsPage from "./pages/community/PostDetailsPage.jsx";
 import UserProfile from "./components/user/UserProfile.jsx";
 import FindPassword from "./components/form/FindPassword.jsx";
 import FindUsername from "./components/form/FindUsername.jsx";
+import UserPasswordUpdate from "./components/user/UserPasswordUpdate.jsx";
 
 const theme = createTheme({
     palette: {
@@ -96,7 +97,8 @@ function App() {
                             {/* Add other community routes as needed */}
                             {/* <Route path="community/general" element={<PostListPage />} /> */}
                             {/* <Route path="community/team-recruit" element={<PostListPage />} /> */}
-
+                            <Route path= "/user/profile" element={<UserProfile />} />
+                            <Route path= "/user/password" element={<UserPasswordUpdate/>} />
 
                             <Route path="teams/:teamId" element={<StudyPage />}>
                                 <Route path="study" element={<StudyListPage />} />

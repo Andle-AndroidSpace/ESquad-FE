@@ -51,30 +51,37 @@ const LoginForm = ({ setIsLoggedIn }) => {
             <Typography variant='h4' fontWeight='bold'>다시 만나서 반가워요</Typography>
             <form onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
                 <FormControl fullWidth margin='normal'>
-                    <InputLabel shrink htmlFor="username">아이디</InputLabel>
                     <TextField
                         id="username"
                         name="username"
+                        label="아이디"
                         variant="outlined"
                         placeholder='아이디를 입력하세요'
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </FormControl>
                 <FormControl fullWidth margin='normal'>
-                    <InputLabel shrink htmlFor="password">비밀번호</InputLabel>
                     <TextField
                         id="password"
                         name="password"
+                        label="비밀번호"
                         type="password"
                         variant="outlined"
                         placeholder='비밀번호를 입력하세요'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </FormControl>
+
                 <FormControlLabel
                     control={<Checkbox id="remember" />}
                     label="30일 동안 기억하기"
