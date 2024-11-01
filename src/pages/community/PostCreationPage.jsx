@@ -1,13 +1,27 @@
 // PostCreationPage.js
 import React, { useState } from 'react';
-import { Box, Button, Typography, InputBase, Divider, Chip, TextField } from '@mui/material';
+import {Box, Button, Typography, InputBase, Divider, Chip, TextField, IconButton} from '@mui/material';
 import { useTheme } from '@mui/material';
 import { Autocomplete } from '@mui/material';
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const PostCreationPage = ({ onCancel }) => {
     const theme = useTheme();
     const [activeTab, setActiveTab] = useState('질문');
     const [tags, setTags] = useState([]);
+    const [file, setFile] = useState(null);
+
+    const handleFileUpload = (event) => {
+        const uploadedFile = event.target.files[0];
+        if (uploadedFile) {
+            setFile(uploadedFile);
+        }
+    };
+
+    const handleFileDelete = () => {
+        setFile(null);
+    };
 
     const renderTabContent = () => {
         const placeholders = {
@@ -104,7 +118,8 @@ const PostCreationPage = ({ onCancel }) => {
     };
 
     const handleSubmit = () => {
-        const urlSuffix = activeTab === '질문' ? 'type=qna' : activeTab === '고민있어요' ? 'type=worry' : 'type=study';
+        const urlSuffix =
+            activeTab === '질문' ? 'type=qna' : activeTab === '고민있어요' ? 'type=general' : 'type=study';
         console.log(`Submit URL with suffix: ${urlSuffix}`);
     };
 
@@ -139,8 +154,36 @@ const PostCreationPage = ({ onCancel }) => {
                     </Button>
                 ))}
             </Box>
-            {/*<Divider sx={{ mb: 2 }} />*/}
+
             {renderTabContent()}
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    px: 1,
+                    mb: 2,
+                }}
+            >
+                <Button
+                    variant="contained"
+                    component="label"
+                    startIcon={<AttachFileIcon />}
+                    sx={{ backgroundColor: theme.palette.primary.main, color: '#fff' }}
+                >
+                    파일 첨부
+                    <input type="file" hidden onChange={handleFileUpload} />
+                </Button>
+                {file && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography variant="body2">{`${file.name} (${(file.size / 1024).toFixed(2)} KB)`}</Typography>
+                        <IconButton onClick={handleFileDelete} size="small">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Box>
+                )}
+            </Box>
             <Box
                 sx={{
                     display: 'flex',
