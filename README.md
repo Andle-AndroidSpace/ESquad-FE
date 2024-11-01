@@ -1,8 +1,52 @@
-# React + Vite
+# ESquad Front-end
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### 이 프로젝트는 실시간 커뮤니케이션 기반 스터디 플랫폼 "ESquad"의 프론트엔드 서버입니다.
 
-Currently, two official plugins are available:
+## Info
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+ESquad는 팀 스터디 활동을 기록, 소통, 공유하여 팀 단위와 개인의 학습을 향상시키는 플랫폼입니다. 
+
+이를 통해 다음과 같은 목표를 달성하고자 합니다.
+
+ 
+
+팀원 간 실시간 소통을 통해 지식을 공유하고 토론을 활성화하여, 학습 효과를 극대화합니다.
+
+브레인스토밍 및 지식 공유 공간을 제공하여 학습 과정에서의 아이디어를 기록하고, 이를 팀 내에서 활용할 수 있도록 지원합니다.
+
+팀 단위 및 개인 학습 성과를 기록하여 장기적인 학습 관리와 성취도를 추적할 수 있는 시스템을 구현합니다.
+
+## 
+
+**주요 기능​은 다음과 같습니다.**
+
+- 실시간 스트리밍 (화면 공유 및 화상 대화)
+- 스터디 페이지별 스토리지 제공
+- 팀 스페이스내 채팅
+- 팀 스페이스 (팀 단위 학습 공간)
+- 커뮤니티
+- 각종 알림
+- 도서 검색
+- 유저 관리
+
+
+
+## Settings
+
+### npm
+```npm i -f```
+
+## Tech Stack
+
+|  | 개발환경 |
+| --- | --- |
+| 운영체제 | Windows10, 11 64bit / macOS Sequoia 15.0.1​ |
+| 개발언어 | Java(Correto 17), JavaScript​ |
+| 개발도구 | IntelliJ, gradle, PUTTY, DBeaver, DataGrip, PostMan |
+| 프레임워크 | Spring boot 3.3.2, JPA |
+| 데이터베이스 | MySQL, Redis, Firebase Realtime DB |
+| AWS | S3, EC2, Route53, ACM​ |
+| 버전 관리 시스템 | Git |
+| 라이브러리 | (build.gradle안의 디펜던시들) |
+| 오픈소스 | (API류) |
+| 설정 파일 확장자 | yml |
