@@ -260,13 +260,13 @@ const JoinForm = () => {
   };
 
   return (
-      <Container maxWidth="sm">
-        <Box sx={{ p: 3, bgcolor: 'white', borderRadius: 2, boxShadow: 3, maxWidth: 600, margin: '0 auto' }}>
+      <Container maxWidth="md">
+        <Box sx={{ p: 5, bgcolor: 'white', borderRadius: 2, boxShadow: 3, maxWidth: 800, margin: '0 auto' }}>
           <Typography variant="h4" component="h1" gutterBottom textAlign="center">
             회원가입
           </Typography>
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
               <Grid item xs={12} sm={8}>
                 <TextField
                     fullWidth
@@ -424,14 +424,14 @@ const JoinForm = () => {
                     type="submit"
                     variant="contained"
                     fullWidth
-                    sx={{ py: 1.5, bgcolor: 'primary.main' }}
+                    sx={{ py: 2, bgcolor: 'primary.main' }}
                 >
                   회원가입
                 </Button>
               </Grid>
             </Grid>
           </form>
-          <Box mt={4} textAlign="center">
+          <Box mt={5} textAlign="center">
             <Typography variant="body1">
               이미 계정이 있으신가요?{' '}
               <Link to="/login" style={{ color: '#3f51b5', fontWeight: 'bold' }}>
