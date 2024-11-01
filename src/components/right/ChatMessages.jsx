@@ -17,10 +17,11 @@ const ChatMessages = ({ currentChatRoom }) => {
     const { userInfo } = useUser();
     const userId = userInfo ? userInfo.id : "";
     const username = userInfo ? userInfo.username : "";
-    const roomId = currentChatRoom.id; // 현재 채팅 방 ID 사용
+    const roomId = currentChatRoom.id;
 
     const loadMessages = async () => {
         const fetchedMessages = await fetchMessage(roomId);
+        console.log('가져온 메시지:', fetchedMessages); // 추가된 로그
         const updatedMessages = fetchedMessages.map((msg) => {
             const savedFileUrl = localStorage.getItem(`file_${msg.id}`);
             return savedFileUrl ? { ...msg, fileUrl: savedFileUrl } : msg;
@@ -55,7 +56,9 @@ const ChatMessages = ({ currentChatRoom }) => {
             ...(fileUrl && { fileUrl }),
         };
 
+        console.log('전송할 메시지 데이터:', messageData); // 추가된 로그
         const sendResponse = await sendMessage(messageData);
+        console.log('서버 응답:', sendResponse); // 추가된 로그
 
         if (!sendResponse || sendResponse.status !== "success") {
             console.error('메시지 전송 실패:', sendResponse);
@@ -69,20 +72,25 @@ const ChatMessages = ({ currentChatRoom }) => {
             return;
         }
 
+        // 새로운 메시지를 messages 상태에 추가합니다.
         const newMessage = {
             ...messageData,
             id: messageId,
             timestamp: new Date().toISOString(),
         };
 
+        console.log('새로운 메시지:', newMessage); // 추가된 로그
+
         setMessages((prevMessages) => {
             const updatedMessages = [...prevMessages, newMessage];
             localStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
             return updatedMessages;
         });
-        setMessage("");
-        setSelectedFile(null);
-        setPreviewUrl("");
+
+        // 상태 초기화
+        setMessage(""); // 메시지 입력 필드를 초기화
+        setSelectedFile(null); // 선택한 파일 초기화
+        setPreviewUrl(""); // 미리보기 URL 초기화
     };
 
     const handleEditMessageFunc = (id, currentMessage) => {
@@ -94,6 +102,7 @@ const ChatMessages = ({ currentChatRoom }) => {
         if (editMessage.trim() === "") return;
 
         const response = await editChatMessage(roomId, editMessageId, { newMessage: editMessage, userId });
+        console.log('수정 응답:', response); // 추가된 로그
 
         if (response && response.status === "success") {
             setMessages((prevMessages) =>
@@ -111,6 +120,8 @@ const ChatMessages = ({ currentChatRoom }) => {
 
     const handleDeleteMessageFunc = async (id, fileUrl) => {
         const response = await deleteMessage(roomId, id, userId);
+        console.log('삭제 응답:', response); // 추가된 로그
+
         if (response && response.status === "success") {
             setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== id));
 
@@ -192,6 +203,7 @@ const ChatMessages = ({ currentChatRoom }) => {
 
     return (
         <div className="chat-container">
+            {console.log('현재 메시지 목록:', messages)} {/* 추가된 로그 */}
             <MessageList
                 messages={messages}
                 userId={userId}

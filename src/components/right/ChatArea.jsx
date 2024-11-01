@@ -16,11 +16,11 @@ const ChatArea = ({ teams }) => {
 
             {/* 채팅 메시지 영역 */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-                {currentChatRoom ? (
+                {teams.length > 0 && currentChatRoom ? ( // teams가 존재하고 currentChatRoom이 있을 때
                     <ChatMessages currentChatRoom={currentChatRoom} />
                 ) : (
                     <Typography variant="h6" sx={{ p: 2, fontSize: '1rem' }}>
-                        소속된 팀이 없습니다.
+                        소속된 팀이 없습니다. 팀에 가입해주세요! :)
                     </Typography>
                 )}
             </Box>
