@@ -31,7 +31,7 @@ import bookProfileManAndSea from "../../assets/book-profile-man-and-sea.jpg";
 const BookDetailPage = ({ isSmallScreen, isMediumScreen }) => {
     const theme = useTheme();
     const location = useLocation();
-    const book = location.state.book;
+    const book = location.state.study;
     const params = useParams();
     const [isStudyModalOpen, setIsStudyModalOpen] = useState(false);
 
@@ -63,7 +63,7 @@ const BookDetailPage = ({ isSmallScreen, isMediumScreen }) => {
                 <Grid2 item xs={12} md={4}>
                     <Box
                         component="img"
-                        src={book.src}
+                        src={book.image}
                         alt={book.title}
                         sx={{
                             width: '100%',

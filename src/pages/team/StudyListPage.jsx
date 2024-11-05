@@ -1,51 +1,60 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import { useUser } from '/src/components/form/UserContext';
 import {
     Box,
     Button,
     Typography,
-    InputBase,
-    Dialog,
-    DialogContent,
+    Grid,
     Card,
     CardContent,
     CardActions,
-    Grid,
 } from '@mui/material';
-import { alpha, useTheme } from '@mui/material';
-import PostCreationDialog from '../../components/content/community/PostCreationDialog.jsx';
+import { useTheme } from '@mui/material/styles';
 import SearchComponent from "../../components/team/SearchComponent.jsx";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
 
 const StudyListPage = ({ isSmallScreen, isMediumScreen }) => {
     const theme = useTheme();
     const params = useParams();
     const navigate = useNavigate();
     const teamId = params.teamId;
-    const [studys, setStudys] = useState([
-        {"id": 2, "teamId": teamId, "bookId": 4, "title": "스터디읻이디리딩딩딩", "members": 12},
-        {"id": 5, "teamId": teamId, "bookId": 2, "title": "케로케로케로디리딩딩딩", "members": 12},
-        {"id": 1, "teamId": teamId, "bookId": 66, "title": "디리딩디읻", "members": 12},
-        {"id": 9, "teamId": teamId, "bookId": 16, "title": "쿵쿵타리", "members": 12},
-        {"id": 13, "teamId": teamId, "bookId": 53, "title": "삐기삐끼", "members": 12},
-        {"id": 23, "teamId": teamId,"bookId": 38, "title": "이디리딩딩딩", "members": 12},
-    ]);
-    // const [isPostModalOpen, setIsPostModalOpen] = useState(false);  // 2차
+    const [studys, setStudys] = useState([]);
+    const [loading, setLoading] = useState(true); // 로딩 상태 관리
+    const [error, setError] = useState(false); // 에러 상태 관리
 
-    // 2차
-    // const handleWriteButtonClick = () => {
-    //     setIsPostModalOpen(true);
-    // };
-    //
-    // const handleClosePostModal = () => {
-    //     setIsPostModalOpen(false);
-    // };
+    const { userInfo } = useUser();
+    const handleStreamingButtonClick = (username) => {
+        const popupUrl = `https://webrtc.store/esquad?name=${encodeURIComponent(username)}`;
+        window.open(popupUrl, '_blank', 'width=800,height=600');
+    };
+
+    useEffect(() => {
+        const fetchStudies = async () => {
+            try {
+                const response = await axios.get(`/api/${teamId}/study-pages`); // 팀 ID를 기반으로 데이터 가져오기
+                setStudys(response.data); // 가져온 데이터를 상태에 저장
+            } catch (err) {
+                console.error(err);
+                setError(true); // 에러 발생 시 상태 업데이트
+            } finally {
+                setLoading(false); // 로딩 종료
+            }
+        };
+
+        fetchStudies(); // 컴포넌트 마운트 시 데이터 가져오기
+    }, [teamId]); // teamId가 변경될 때마다 데이터 fetch
+
+    if (loading) return <p>Loading...</p>; // 로딩 중 표시
+    if (error) return <p>Error loading studies.</p>; // 에러 발생 시 표시
+
+    {studys.map((study, index) => (console.log(study)))}
 
     return (
         <>
             {/* Filters and Search */}
             <Box
                 sx={{
-                    // border: '1px solid',    // 추후 삭제
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -64,15 +73,7 @@ const StudyListPage = ({ isSmallScreen, isMediumScreen }) => {
                         justifyContent: 'flex-start',
                     }}
                 >
-                    <Button
-                        variant="text"
-                        sx={{
-                            fontSize: 'medium',
-                            fontWeight: 'bold',
-                            borderBottom: '2px solid',
-                            borderColor: theme.palette.primary.main,
-                        }}
-                    >
+                    <Button variant="text" sx={{ fontSize: 'medium', fontWeight: 'bold', borderBottom: '2px solid', borderColor: theme.palette.primary.main }}>
                         전체
                     </Button>
                     <Button variant="text" sx={{ fontSize: 'medium' }}>
@@ -88,7 +89,6 @@ const StudyListPage = ({ isSmallScreen, isMediumScreen }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 2,
-                        // mt: 2,
                         width: '90%',
                     }}
                 >
@@ -134,21 +134,29 @@ const StudyListPage = ({ isSmallScreen, isMediumScreen }) => {
                                         {study.title}
                                     </Typography>
                                 </Box>
-                                <Typography variant="body2" sx={{ color: theme.palette.grey[700], mb: 2 }}>
-                                    인원수: {study.members}명
-                                </Typography>
-                                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                                    {['react-native', 'typescript', 'nestjs', 'react-query', 'zustand'].map(
-                                        (tag, idx) => (
-                                            <Button key={idx} variant="outlined" size="small" sx={{ borderRadius: 4, fontSize: '0.7rem' }}>
-                                                {tag}
-                                            </Button>
-                                        )
-                                    )}
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                                    <img src={study.image} alt="Study" style={{ maxWidth: '100%', borderRadius: 4 }} />
                                 </Box>
+                                {/*<Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>*/}
+                                {/*    {['react-native', 'typescript', 'nestjs', 'react-query', 'zustand'].map(*/}
+                                {/*        (tag, idx) => (*/}
+                                {/*            <Button key={idx} variant="outlined" size="small" sx={{ borderRadius: 4, fontSize: '0.7rem' }}>*/}
+                                {/*                {tag}*/}
+                                {/*            </Button>*/}
+                                {/*        )*/}
+                                {/*    )}*/}
+                                {/*</Box>*/}
                             </CardContent>
                             <CardActions sx={{ justifyContent: 'flex-end' }}>
-                                <Button variant="outlined" size="small" sx={{ color: theme.palette.primary.main }}>
+                                <Button
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{ color: theme.palette.primary.main }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleStreamingButtonClick(userInfo.username);
+                                    }}
+                                >
                                     스트리밍
                                 </Button>
                             </CardActions>
