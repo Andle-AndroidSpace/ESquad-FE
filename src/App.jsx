@@ -19,6 +19,7 @@ import FindUsername from "./components/form/FindUsername.jsx";
 import UserPasswordUpdate from "./components/user/UserPasswordUpdate.jsx";
 import UserUpdate from "./components/user/UserUpdate.jsx";
 import UserInquiry from "./components/user/UserInquiry.jsx";
+import PostEditPage  from "./pages/community/PostEditPage.jsx";
 
 const theme = createTheme({
     palette: {
@@ -109,7 +110,9 @@ function App() {
                                 <Route path="study/:studyId" element={<StudyDetailPage />} />
                                 <Route path="book/search" element={<BookListPage />} />
                                 <Route path="book/search/:bookId" element={<BookDetailPage />} />
-                                <Route path="questions" element={<StudyPage />} />
+                                <Route path="questions" element={<PostListPage />} />
+                                <Route path="questions/:postId" element={<PostDetailsPage />} />
+                                <Route path="questions/:postId/edit" element={<PostEditPage />} />
                             </Route>
                         </Route>
 
